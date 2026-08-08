@@ -115,24 +115,12 @@
   <!-- App Wrapper to match mobile dimensions centered on desktop -->
   <div class="max-w-[412px] mx-auto min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col">
     
-    <!-- TopAppBar (Dynamic Header) -->
-    <header class="w-full bg-surface flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
+    <!-- TopAppBar -->
+    <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
       <div class="flex items-center gap-3">
-        <!-- Auth View Greeting -->
-        <div class="flex items-center gap-3" id="headerAuthArea" style="display: none;">
-          <div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container border border-outline-variant">
-            <img id="headerAvatar" alt="User avatar" class="w-full h-full object-cover" src="">
-          </div>
-          <h1 class="font-headline-md text-sm font-bold text-on-surface">Good evening, <span id="headerName">Dev</span> 👋</h1>
-        </div>
-        
-        <!-- Public Brand View Logo -->
-        <div class="flex items-center" id="headerPublicArea">
-          <h1 class="font-headline-md text-lg font-extrabold tracking-tight text-primary">AB<span class="text-primary-fixed">TALKS</span></h1>
-        </div>
+        <h1 class="font-bold tracking-tight text-lg">AB<span class="text-primary-fixed">TALKS</span></h1>
       </div>
-      
-      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors" id="btnNotification" onclick="handleNavClick('./dashboard/')">
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors notification-btn relative" id="btnNotification">
         <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
       </button>
     </header>
@@ -239,38 +227,7 @@
   <script type="module">
     import { getState, isLoggedIn, login } from './shared/state.js';
     
-    const authed = isLoggedIn();
-    const headerAuthArea = document.getElementById("headerAuthArea");
-    const headerPublicArea = document.getElementById("headerPublicArea");
     const startBtn = document.getElementById("btnStartJourney");
-    const notificationBtn = document.getElementById("btnNotification");
-    
-    if (authed) {
-      headerAuthArea.style.display = "flex";
-      headerPublicArea.style.display = "none";
-      notificationBtn.style.display = "flex";
-      
-      const state = getState();
-      document.getElementById("headerName").innerText = state.profileName.split(" ")[0];
-      
-      const avatarImg = document.getElementById("headerAvatar");
-      if (state.profileAvatar) {
-        avatarImg.src = state.profileAvatar;
-      } else {
-        avatarImg.style.display = "none";
-        const wrapper = avatarImg.parentElement;
-        wrapper.style.display = "flex";
-        wrapper.style.alignItems = "center";
-        wrapper.style.justifyContent = "center";
-        wrapper.style.color = "var(--accent-green)";
-        wrapper.style.fontWeight = "bold";
-        wrapper.innerText = state.profileName.charAt(0);
-      }
-    } else {
-      headerAuthArea.style.display = "none";
-      headerPublicArea.style.display = "flex";
-      notificationBtn.style.display = "none";
-    }
     
     // Start Journey CTA handler
     startBtn.addEventListener("click", () => {
