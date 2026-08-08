@@ -7,9 +7,9 @@ const DEFAULT_STATE = {
   profileGithub: "https://github.com/aaravsharma",
   profileLinkedin: "https://linkedin.com/in/aaravsharma",
   streak: 11,
-  completedCount: 12,
-  momentum: [0, 1, 1, 1, 0, 1, 1, 1],
-  completedDays: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  completedCount: 11,
+  momentum: [0, 1, 1, 1, 0, 1, 1, 0],
+  completedDays: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   skills: {
     layout: 85,
     state: 60,
@@ -20,7 +20,7 @@ const DEFAULT_STATE = {
     { id: "first-build", title: "First Build", desc: "The journey begins", unlocked: true },
     { id: "7-day", title: "7 Day Streak", desc: "Consistency is key", unlocked: true },
     { id: "10-builds", title: "10 Builds", desc: "Double digits baby", unlocked: true },
-    { id: "public-builder", title: "Public Builder", desc: "Shared with the world", unlocked: true }
+    { id: "public-builder", title: "Public Builder", desc: "Shared with the world", unlocked: false }
   ],
   day12Checked: [false, false, false],
   day12SubmittedCode: "",
@@ -95,7 +95,12 @@ export function getState() {
   const preset = getActivePreset();
   const stored = localStorage.getItem(`abtalks_state_${preset}`);
   if (stored) {
-    return JSON.parse(stored);
+    const parsed = JSON.parse(stored);
+    if (preset === "default" && parsed.completedDays.includes(12) && !parsed.day12CodeVerified) {
+      localStorage.removeItem("abtalks_state_default");
+    } else {
+      return parsed;
+    }
   }
   
   let state;

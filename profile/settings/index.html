@@ -145,7 +145,6 @@
           <!-- Notifications Settings Custom Icon Toggle -->
           <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium" id="toggleNotifsBtn">
             <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
               <div class="flex flex-col">
                 <span>Notification Settings</span>
                 <span class="text-3xs text-on-surface-variant" id="notifStatusLabel">Notifications: Enabled</span>
@@ -157,20 +156,7 @@
             </div>
           </div>
           
-          <!-- Theme Preferences Slide Toggle -->
-          <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium" id="toggleThemeBtn">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
-              <div class="flex flex-col">
-                <span>Dark Mode Theme</span>
-                <span class="text-3xs text-on-surface-variant" id="themeStatusLabel">Theme: Dark</span>
-              </div>
-            </div>
-            <!-- Custom Toggle Switch -->
-            <div class="relative w-10 h-6 bg-surface-container border border-outline-variant rounded-full transition-colors duration-200" id="themeSwitchBg">
-              <div class="absolute top-[2px] left-[2px] w-4.5 h-4.5 bg-text-muted rounded-full transition-transform duration-200" id="themeSwitchThumb"></div>
-            </div>
-          </div>
+
           
           <!-- Logout Button -->
           <div class="flex justify-between items-center px-4 py-3.5 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium text-[#EF6464]" id="logoutBtn">
@@ -219,7 +205,7 @@
   </div>
   
   <script type="module">
-    import { getState, saveState, logout, getTheme, setTheme, areNotificationsEnabled, setNotificationsEnabled } from '../../shared/state.js';
+    import { getState, saveState, logout, areNotificationsEnabled, setNotificationsEnabled } from '../../shared/state.js';
     
     const state = getState();
     
@@ -315,41 +301,7 @@
     });
     updateNotifsUI();
     
-    // --- Theme Slide Toggle ---
-    const toggleThemeBtn = document.getElementById("toggleThemeBtn");
-    const themeStatusLabel = document.getElementById("themeStatusLabel");
-    const themeSwitchBg = document.getElementById("themeSwitchBg");
-    const themeSwitchThumb = document.getElementById("themeSwitchThumb");
-    
-    const updateThemeUI = () => {
-      const activeTheme = getTheme();
-      themeStatusLabel.innerText = `Theme: ${activeTheme === 'dark' ? 'Dark Mode' : 'Light Mode'}`;
-      
-      if (activeTheme === "light") {
-        themeSwitchBg.style.backgroundColor = "var(--bg-surface-container)";
-        themeSwitchBg.style.borderColor = "var(--border-color)";
-        themeSwitchThumb.style.transform = "translateX(0px)";
-        themeSwitchThumb.style.backgroundColor = "var(--text-muted)";
-        
-        document.documentElement.classList.remove("dark");
-        document.documentElement.classList.add("light-theme");
-      } else {
-        themeSwitchBg.style.backgroundColor = "var(--accent-green)";
-        themeSwitchBg.style.borderColor = "var(--accent-green)";
-        themeSwitchThumb.style.transform = "translateX(16px)";
-        themeSwitchThumb.style.backgroundColor = "#000000";
-        
-        document.documentElement.classList.add("dark");
-        document.documentElement.classList.remove("light-theme");
-      }
-    };
-    
-    toggleThemeBtn.addEventListener("click", () => {
-      const current = getTheme();
-      setTheme(current === "dark" ? "light" : "dark");
-      updateThemeUI();
-    });
-    updateThemeUI();
+
     
     // --- Logout Dialog ---
     const logoutBtn = document.getElementById("logoutBtn");

@@ -85,3 +85,21 @@ ABTalks_ModernMinds/
   - Implemented custom SVG notification indicators (Clarity Solid and Denali Slashed bells) that toggle dynamically.
   - Shifted the user greeting row ("Good afternoon, Aarav Sharma 👋") below the header navbar on the Dashboard and Day 12 views.
   - Added a dismissible top alert toast with **Noted**, **Clear**, and **Ignore** actions. Selecting "Ignore" makes the notification alert reappear persistently on every future session reload or login.
+
+### 🟢 Fourth Commit
+- Message: `feat: lock verified links, add caution alerts, and enforce single daily streak awards`
+- **Details**:
+  - Swapped verification input fields from `type="url"` to `type="text"`, allowing users to enter and submit any text string for quick challenge verifications.
+  - Disabled input fields and verify buttons immediately after URL verification to prevent subsequent editing.
+  - Displayed a static warning banner directly under the "Submit Proof of Work" header: *"Once the urls are submitted it cannot be reverted back"*.
+  - Configured native click confirmation prompts during code/post verification submissions, warning users that the URLs cannot be reverted.
+  - Implemented state validation checks ensuring that the student's streak and completed day counters increment only once per challenge.
+
+### 🟢 Fifth Commit
+- Message: `feat: relocate theme toggle, simplify landing layouts, and reset default state`
+- **Details**:
+  - Added a functional theme toggle icon (dynamic Sun ☀️ / Moon 🌙 Material Symbols) inside the top header navbar on the Profile view immediately beside the Settings gear button.
+  - Completely removed the theme sliding switch option and the left bell icon from the Settings page menu.
+  - Reconfigured the default Aarav Sharma template to initialize with completedCount = 11, completedDays up to 11, momentum Day 12 slot uncompleted, and empty submissions URLs.
+  - Added cache checking functions to auto-clear previous inconsistent localStorage objects and apply the fresh Day 12 uncompleted state.
+  - Removed the bottom navigation tab bar and the top notification bell button from the public landing page (`index.html`) layout to clean up the landing visitor view experience.

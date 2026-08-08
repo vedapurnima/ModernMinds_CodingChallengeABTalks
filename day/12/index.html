@@ -196,10 +196,15 @@
         
         <!-- PROOF OF WORK SECTION -->
         <div class="mt-4 flex flex-col gap-4 text-left">
-          <h3 class="font-headline-md text-base font-bold text-primary flex items-center gap-2">
-            <span class="material-symbols-outlined">upload_file</span>
-            Submit Proof of Work
-          </h3>
+          <div>
+            <h3 class="font-headline-md text-base font-bold text-primary flex items-center gap-2 mb-1">
+              <span class="material-symbols-outlined">upload_file</span>
+              Submit Proof of Work
+            </h3>
+            <p class="text-3xs text-orange-400 font-bold flex items-center gap-1 font-label-sm">
+              <span class="material-symbols-outlined text-xs">warning</span> Once the urls are submitted it cannot be reverted back
+            </p>
+          </div>
           
           <div class="grid grid-cols-1 gap-6">
             
@@ -379,7 +384,7 @@
     
     if (state.day12CodeVerified) {
       setBtnVerified(btnVerifyCode, "Code Verified");
-      codeUrlInput.value = state.day12SubmittedCode || "https://github.com/username/repo";
+      codeUrlInput.value = state.day12SubmittedCode || "";
       codeUrlInput.disabled = true;
     }
     
@@ -391,11 +396,15 @@
         return;
       }
       
+      const confirmSubmit = confirm("Caution: Once the urls are submitted it cannot be reverted back. Do you want to proceed?");
+      if (!confirmSubmit) return;
+      
       btnVerifyCode.disabled = true;
       btnVerifyCode.innerHTML = `<span class="spinner"></span>`;
       
       setTimeout(() => {
         setBtnVerified(btnVerifyCode, "Code Verified");
+        codeUrlInput.disabled = true;
         state.day12CodeVerified = true;
         state.day12SubmittedCode = val;
         saveState(state);
@@ -409,7 +418,7 @@
     
     if (state.day12SocialVerified) {
       setBtnVerified(btnVerifySocial, "Post Verified");
-      socialUrlInput.value = state.day12SubmittedSocial || "https://linkedin.com/posts/...";
+      socialUrlInput.value = state.day12SubmittedSocial || "";
       socialUrlInput.disabled = true;
     }
     
@@ -421,11 +430,15 @@
         return;
       }
       
+      const confirmSubmit = confirm("Caution: Once the urls are submitted it cannot be reverted back. Do you want to proceed?");
+      if (!confirmSubmit) return;
+      
       btnVerifySocial.disabled = true;
       btnVerifySocial.innerHTML = `<span class="spinner"></span>`;
       
       setTimeout(() => {
         setBtnVerified(btnVerifySocial, "Post Verified");
+        socialUrlInput.disabled = true;
         state.day12SocialVerified = true;
         state.day12SubmittedSocial = val;
         saveState(state);
@@ -436,6 +449,8 @@
     const checkChallengeCompletion = () => {
       if (state.day12CodeVerified && state.day12SocialVerified) {
         if (isNew) {
+          if (state.completedDays.includes(1)) return;
+          
           state.streak = 1;
           state.completedCount = 1;
           state.completedDays.push(1);
@@ -444,11 +459,11 @@
           state.achievements.find(a => a.id === "first-build").unlocked = true;
           document.getElementById("successDesc").innerText = "Day 1 successfully submitted. Your learning streak has been extended to 1 day!";
         } else {
+          if (state.completedDays.includes(12)) return;
+          
           state.streak = state.streak === 0 ? 1 : state.streak + 1;
           state.completedCount += 1;
-          if (!state.completedDays.includes(12)) {
-            state.completedDays.push(12);
-          }
+          state.completedDays.push(12);
           state.momentum[7] = 1;
           state.skills.layout = 95;
           state.skills.state = 65;
