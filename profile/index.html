@@ -74,7 +74,6 @@
   <style>
     body { background-color: var(--bg-main); color: var(--text-primary); }
     .card-border { border: 1px solid var(--border-color); }
-    
     .pb-nav { padding-bottom: 80px; }
   </style>
 </head>
@@ -85,7 +84,7 @@
     <!-- TopAppBar -->
     <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
       <h1 class="font-bold tracking-tight">Profile</h1>
-      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors">
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors" onclick="window.location.href='./settings/'">
         <span class="material-symbols-outlined text-on-surface-variant">settings</span>
       </button>
     </header>
@@ -101,10 +100,10 @@
         <p class="text-xs text-on-surface-variant max-w-[280px] leading-relaxed mb-4" id="profileBio">Full-stack Developer & 60-day Builder. Currently mastering responsive design.</p>
         
         <div class="flex gap-3">
-          <button class="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg card-border text-xs font-bold text-primary hover:bg-surface-container transition-colors" onclick="window.open('https://github.com', '_blank')">
+          <button class="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg card-border text-xs font-bold text-primary hover:bg-surface-container transition-colors" id="btnGit">
             <span class="material-symbols-outlined text-sm">code</span> GitHub
           </button>
-          <button class="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg card-border text-xs font-bold text-primary hover:bg-surface-container transition-colors" onclick="window.open('https://linkedin.com', '_blank')">
+          <button class="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg card-border text-xs font-bold text-primary hover:bg-surface-container transition-colors" id="btnLinkedin">
             <span class="material-symbols-outlined text-sm">share</span> LinkedIn
           </button>
         </div>
@@ -148,45 +147,10 @@
           <!-- Injected dynamically -->
         </div>
       </div>
-      
-      <!-- Account Settings -->
-      <div class="flex flex-col gap-3">
-        <span class="font-label-sm text-xs font-bold text-on-surface-variant uppercase ml-1">Account</span>
-        <div class="flex flex-col bg-surface rounded-xl card-border overflow-hidden">
-          
-          <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
-              <span>Notification Settings</span>
-            </div>
-            <span class="material-symbols-outlined text-on-surface-variant text-base">chevron_right</span>
-          </div>
-          
-          <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium" id="themePrefBtn">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
-              <div class="flex flex-col">
-                <span>Theme Preferences</span>
-                <span class="text-3xs text-on-surface-variant" id="themeStatusLabel">Appearance: Dark</span>
-              </div>
-            </div>
-            <span class="material-symbols-outlined text-on-surface-variant text-base">chevron_right</span>
-          </div>
-          
-          <div class="flex justify-between items-center px-4 py-3.5 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium text-[#EF6464]" id="logoutBtn">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined">logout</span>
-              <span>Logout</span>
-            </div>
-            <span class="material-symbols-outlined text-base">chevron_right</span>
-          </div>
-          
-        </div>
-      </div>
     </main>
     
     <!-- BottomNavBar -->
-    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+    <nav class="fixed bottom-0 z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10 w-full max-w-[412px] left-1/2 -translate-x-1/2 shadow-lg">
       <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../dashboard/">
         <span class="material-symbols-outlined">home</span>
         <span class="font-label-sm text-xs mt-1">Home</span>
@@ -205,39 +169,9 @@
       </a>
     </nav>
   </div>
-
-  <!-- Logout Confirmation Modal Sheet -->
-  <div class="bottom-sheet-modal" id="logoutConfirmModal">
-    <div class="bottom-sheet">
-      <h3>Log out of ABTalks?</h3>
-      <p>Your challenge progress is safely stored in this demo.</p>
-      <div class="bottom-sheet-buttons">
-        <button class="sheet-btn sheet-btn-cancel" id="btnCancelLogout">Cancel</button>
-        <button class="sheet-btn sheet-btn-confirm" id="btnConfirmLogout">Log out</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Theme Preferences Modal Sheet -->
-  <div class="bottom-sheet-modal" id="themePrefsModal">
-    <div class="bottom-sheet">
-      <h3>Theme Preferences</h3>
-      <div class="theme-options-list">
-        <div class="theme-option-item" id="optThemeDark" data-theme="dark">
-          <span>Dark Mode</span>
-          <div class="theme-radio"></div>
-        </div>
-        <div class="theme-option-item" id="optThemeLight" data-theme="light">
-          <span>Light Mode</span>
-          <div class="theme-radio"></div>
-        </div>
-      </div>
-      <button class="w-full bg-primary-fixed text-on-primary-fixed font-bold py-3 rounded-lg" id="btnCloseTheme">Close</button>
-    </div>
-  </div>
   
   <script type="module">
-    import { getState, logout, getTheme, setTheme } from '../shared/state.js';
+    import { getState } from '../shared/state.js';
     
     const state = getState();
     
@@ -248,6 +182,7 @@
     const avatarImg = document.getElementById("profileAvatar");
     if (state.profileAvatar) {
       avatarImg.src = state.profileAvatar;
+      avatarImg.style.display = "block";
     } else {
       avatarImg.style.display = "none";
       const wrapper = avatarImg.parentElement;
@@ -259,6 +194,17 @@
       wrapper.style.fontSize = "28px";
       wrapper.innerText = state.profileName.charAt(0);
     }
+    
+    // Dynamic Social Bindings
+    document.getElementById("btnGit").onclick = () => {
+      const url = state.profileGithub || "https://github.com";
+      window.open(url, "_blank");
+    };
+    
+    document.getElementById("btnLinkedin").onclick = () => {
+      const url = state.profileLinkedin || "https://linkedin.com";
+      window.open(url, "_blank");
+    };
     
     // Set Profile statistics
     document.getElementById("statStreak").innerText = state.streak;
@@ -303,6 +249,14 @@
     
     const mockBuilds = [
       {
+        day: 12,
+        title: "Build a responsive developer profile card",
+        desc: "Mastered Flexbox and CSS Grid to create a fluid, responsive profile card that looks exceptional on mobile.",
+        tech: "Layout (Flex/Grid)",
+        githubVerified: true,
+        linkedinVerified: true
+      },
+      {
         day: 11,
         title: "Responsive Landing Page Redux",
         desc: "Rebuilt a responsive landing page using modern CSS Grid and container queries.",
@@ -328,17 +282,6 @@
       }
     ];
 
-    if (state.day12CodeVerified && state.day12SocialVerified) {
-      mockBuilds.unshift({
-        day: 12,
-        title: "Build a responsive developer profile card",
-        desc: "Mastered Flexbox and CSS Grid to create a fluid, responsive profile card that looks exceptional on mobile.",
-        tech: "Layout (Flex/Grid)",
-        githubVerified: true,
-        linkedinVerified: true
-      });
-    }
-
     const visibleBuilds = mockBuilds.filter(b => state.completedDays.includes(b.day));
 
     if (visibleBuilds.length === 0) {
@@ -353,7 +296,7 @@
       powContainer.innerHTML = "";
       visibleBuilds.forEach(b => {
         const card = document.createElement("div");
-        card.className = "bg-surface-container/30 border border-outline-variant/30 rounded-xl p-4 flex flex-col gap-3";
+        card.className = "bg-surface-container/30 border border-outline-variant/30 rounded-xl p-4 flex flex-col gap-3 text-left";
 
         card.innerHTML = `
           <div class="flex justify-between items-center">
@@ -376,82 +319,6 @@
         powContainer.appendChild(card);
       });
     }
-
-    // --- Logout confirmation sheets ---
-    const logoutBtn = document.getElementById("logoutBtn");
-    const logoutConfirmModal = document.getElementById("logoutConfirmModal");
-    const btnCancelLogout = document.getElementById("btnCancelLogout");
-    const btnConfirmLogout = document.getElementById("btnConfirmLogout");
-
-    logoutBtn.addEventListener("click", () => {
-      logoutConfirmModal.classList.add("show");
-    });
-
-    const closeLogoutModal = () => {
-      logoutConfirmModal.classList.remove("show");
-    };
-
-    btnCancelLogout.addEventListener("click", closeLogoutModal);
-    logoutConfirmModal.addEventListener("click", (e) => {
-      if (e.target === logoutConfirmModal) closeLogoutModal();
-    });
-
-    btnConfirmLogout.addEventListener("click", () => {
-      logout();
-    });
-
-    // --- Theme Selector Dialog Handlers ---
-    const themePrefBtn = document.getElementById("themePrefBtn");
-    const themePrefsModal = document.getElementById("themePrefsModal");
-    const btnCloseTheme = document.getElementById("btnCloseTheme");
-    const optThemeDark = document.getElementById("optThemeDark");
-    const optThemeLight = document.getElementById("optThemeLight");
-    const themeStatusLabel = document.getElementById("themeStatusLabel");
-
-    const updateThemeUI = () => {
-      const activeTheme = getTheme();
-      themeStatusLabel.innerText = `Appearance: ${activeTheme.charAt(0).toUpperCase() + activeTheme.slice(1)}`;
-      
-      if (activeTheme === "light") {
-        optThemeLight.classList.add("active");
-        optThemeDark.classList.remove("active");
-        
-        document.documentElement.classList.remove("dark");
-        document.documentElement.classList.add("light-theme");
-      } else {
-        optThemeDark.classList.add("active");
-        optThemeLight.classList.remove("active");
-        
-        document.documentElement.classList.add("dark");
-        document.documentElement.classList.remove("light-theme");
-      }
-    };
-
-    themePrefBtn.addEventListener("click", () => {
-      updateThemeUI();
-      themePrefsModal.classList.add("show");
-    });
-
-    const closeThemeModal = () => {
-      themePrefsModal.classList.remove("show");
-    };
-
-    btnCloseTheme.addEventListener("click", closeThemeModal);
-    themePrefsModal.addEventListener("click", (e) => {
-      if (e.target === themePrefsModal) closeThemeModal();
-    });
-
-    optThemeDark.addEventListener("click", () => {
-      setTheme("dark");
-      updateThemeUI();
-    });
-
-    optThemeLight.addEventListener("click", () => {
-      setTheme("light");
-      updateThemeUI();
-    });
-
-    updateThemeUI();
   </script>
 </body>
 </html>

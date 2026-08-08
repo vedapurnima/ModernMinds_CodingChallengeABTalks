@@ -93,23 +93,36 @@
   <div class="max-w-[412px] mx-auto w-full min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col pb-24">
     
     <!-- TopAppBar -->
-    <header class="w-full bg-surface flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
+    <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border border-outline-variant">
-          <img id="headerAvatar" alt="User Profile Avatar" class="w-full h-full object-cover" src=""/>
-        </div>
-        <h1 class="font-headline-md text-sm font-bold text-on-surface"><span id="greetingTime">Good evening</span>, <span id="headerName">Dev</span> 👋</h1>
+        <h1 class="font-bold tracking-tight text-lg">AB<span class="text-primary-fixed">TALKS</span></h1>
       </div>
-      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors group">
-        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">notifications</span>
-      </button>
+      <div class="flex items-center gap-1">
+        <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors notification-btn relative">
+          <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+        </button>
+      </div>
     </header>
     
     <!-- Main Content -->
     <main class="flex-grow w-full px-5 py-8 flex flex-col gap-6">
       
+      <!-- Greeting and Avatar Row (below navbar) -->
+      <div class="flex items-center justify-between bg-surface/40 p-3 rounded-xl border border-outline-variant/20">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary-fixed shadow-[0_0_10px_rgba(184,255,74,0.2)] flex items-center justify-center bg-surface-container">
+            <img id="headerAvatar" alt="User profile avatar" class="object-cover w-full h-full" src=""/>
+            <span id="headerAvatarFallback" class="hidden font-bold text-primary-fixed text-lg"></span>
+          </div>
+          <div class="text-left">
+            <h2 class="text-3xs text-on-surface-variant font-bold uppercase tracking-wider" id="greetingTime">Good afternoon</h2>
+            <h1 class="text-md font-bold text-primary" id="headerName">Dev</h1>
+          </div>
+        </div>
+      </div>
+      
       <!-- Header Section -->
-      <section class="animate-fade-in-up">
+      <section class="animate-fade-in-up text-left">
         <p class="font-label-sm text-xs font-bold text-primary-fixed uppercase tracking-wider mb-2" id="dayIndicator">DAY 12 OF 60</p>
         <h2 class="font-display-xl text-2xl font-bold text-primary leading-tight" id="dayTitle">Build a responsive developer profile card</h2>
       </section>
@@ -125,7 +138,7 @@
             <span class="material-symbols-outlined text-tertiary-fixed-dim">target</span>
             <h3 class="font-headline-md text-tertiary-fixed-dim uppercase text-xs tracking-widest font-bold">Today's Goal</h3>
           </div>
-          <p class="text-on-surface-variant text-sm leading-relaxed" id="goalText">
+          <p class="text-on-surface-variant text-sm leading-relaxed text-left" id="goalText">
             Master Flexbox and CSS Grid to create a fluid, responsive profile card that looks exceptional on mobile devices and gracefully expands for desktop views. Focus on semantic HTML and accessibility best practices.
           </p>
         </div>
@@ -137,7 +150,7 @@
             <span class="material-symbols-outlined text-[#4DE3D2]">build</span>
             <h3 class="font-headline-md text-[#4DE3D2] uppercase text-xs tracking-widest font-bold">What to Build</h3>
           </div>
-          <div class="bg-surface-container rounded-lg p-4 border border-outline-variant/50">
+          <div class="bg-surface-container rounded-lg p-4 border border-outline-variant/50 text-left">
             <p class="text-on-surface-variant text-xs font-label-sm leading-relaxed" id="codeBlock">
               <span class="text-primary">&lt;div class="profile-card"&gt;</span><br/>
               &nbsp;&nbsp;A clean, modern developer business card designed for web. It must include an avatar, bio, tech stack pills, and at least two functional social links.<br/>
@@ -153,7 +166,7 @@
             <span class="material-symbols-outlined text-primary-fixed">checklist</span>
             <h3 class="font-headline-md text-primary-fixed uppercase text-xs tracking-widest font-bold">Acceptance Criteria</h3>
           </div>
-          <div class="space-y-3">
+          <div class="space-y-3 text-left">
             
             <!-- Task Item 1 -->
             <label class="flex items-center gap-4 p-3 rounded-lg bg-surface-container hover:bg-surface-container-highest border border-outline-variant/30 cursor-pointer transition-colors group/item" id="crit1" data-index="0">
@@ -182,7 +195,7 @@
         </div>
         
         <!-- PROOF OF WORK SECTION -->
-        <div class="mt-4 flex flex-col gap-4">
+        <div class="mt-4 flex flex-col gap-4 text-left">
           <h3 class="font-headline-md text-base font-bold text-primary flex items-center gap-2">
             <span class="material-symbols-outlined">upload_file</span>
             Submit Proof of Work
@@ -241,8 +254,8 @@
       </div>
     </main>
     
-    <!-- BottomNavBar (Mobile Only) -->
-    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+    <!-- BottomNavBar -->
+    <nav class="fixed bottom-0 z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10 w-full max-w-[412px] left-1/2 -translate-x-1/2 shadow-lg">
       <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../../dashboard/">
         <span class="material-symbols-outlined">home</span>
         <span class="font-label-sm text-xs mt-1">Home</span>
@@ -299,17 +312,16 @@
     // Header credentials
     document.getElementById("headerName").innerText = state.profileName.split(" ")[0];
     const avatarImg = document.getElementById("headerAvatar");
+    const avatarFallback = document.getElementById("headerAvatarFallback");
+    
     if (state.profileAvatar) {
       avatarImg.src = state.profileAvatar;
+      avatarImg.style.display = "block";
+      avatarFallback.style.display = "none";
     } else {
       avatarImg.style.display = "none";
-      const wrapper = avatarImg.parentElement;
-      wrapper.style.display = "flex";
-      wrapper.style.alignItems = "center";
-      wrapper.style.justifyContent = "center";
-      wrapper.style.color = "var(--accent-green)";
-      wrapper.style.fontWeight = "bold";
-      wrapper.innerText = state.profileName.charAt(0);
+      avatarFallback.style.display = "block";
+      avatarFallback.innerText = state.profileName.charAt(0);
     }
     
     // Acceptance Checklist handler
@@ -445,8 +457,6 @@
         }
         
         saveState(state);
-        
-        // Trigger confetti
         startConfetti();
         
         setTimeout(() => {
@@ -455,7 +465,6 @@
       }
     };
     
-    // Loading spinner helper styles
     const style = document.createElement('style');
     style.innerHTML = `
       .spinner {

@@ -68,3 +68,20 @@ ABTalks_ModernMinds/
   - Added Progress page with circular stats rings and skill level sliders.
   - Programmed Profile tab with unlocked trophies grid and account logout controls.
   - Designed and injected the "Demo Switcher Controls" utility globally.
+
+### 🟢 Second Commit
+- Message: `feat: add notifications, settings page redirection, and fixed navigation bars`
+- **Details**:
+  - Relocated theme preferences, notification settings, and logout buttons from the main **Profile** page to a new dedicated **Settings Page** (`/profile/settings/index.html`).
+  - Added a "How it works" navigation link in the top-right header of the Dashboard page to allow easy return navigation to the Landing page.
+  - Implemented an interactive global **Notifications Drawer** containing alert logs for code streak maintenance, day-to-day challenges, and peer achievements.
+  - Pinned all bottom navigation bars to a fixed position centered to the phone container viewport wrapper.
+
+### 🟢 Third Commit
+- Message: `feat: support image uploads, inline theme toggle, custom notification SVGs, greeting shifts, and dismissible ignored alerts`
+- **Details**:
+  - Replaced the profile avatar URL text input with a native file uploader supporting Base64 uploads.
+  - Migrated the theme preferences select option to a modern inline sliding switch toggle.
+  - Implemented custom SVG notification indicators (Clarity Solid and Denali Slashed bells) that toggle dynamically.
+  - Shifted the user greeting row ("Good afternoon, Aarav Sharma 👋") below the header navbar on the Dashboard and Day 12 views.
+  - Added a dismissible top alert toast with **Noted**, **Clear**, and **Ignore** actions. Selecting "Ignore" makes the notification alert reappear persistently on every future session reload or login.

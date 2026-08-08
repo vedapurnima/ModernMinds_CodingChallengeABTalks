@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Settings - ABTalks</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Hanken+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../shared/global.css">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "var(--bg-main)",
+            "surface": "var(--bg-card)",
+            "surface-dim": "var(--bg-surface-dim)",
+            "surface-container": "var(--bg-surface-container)",
+            "surface-container-highest": "var(--bg-surface-container-highest)",
+            "on-surface": "var(--text-primary)",
+            "on-surface-variant": "var(--text-secondary)",
+            "primary-fixed": "var(--accent-green)",
+            "primary-fixed-dim": "var(--accent-green-dim)",
+            "secondary": "var(--accent-blue)",
+            "tertiary-fixed-dim": "var(--accent-purple)",
+            "outline-variant": "var(--border-color)",
+            "primary": "var(--text-primary)",
+            "on-primary-fixed": "#111f00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "8px",
+            "gutter": "16px",
+            "section-gap": "40px",
+            "container-margin": "24px",
+            "card-padding": "20px"
+          },
+          "fontFamily": {
+            "body-md": ["Geist"],
+            "headline-lg": ["Hanken Grotesk"],
+            "display-xl": ["Hanken Grotesk"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-xl": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <script>
+    if (localStorage.getItem("abt_theme") === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light-theme");
+    }
+  </script>
+  
+  <style>
+    body { background-color: var(--bg-main); color: var(--text-primary); }
+    .card-border { border: 1px solid var(--border-color); }
+    .input-glow-focus:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 10px rgba(184, 255, 74, 0.15);
+    }
+    .pb-nav { padding-bottom: 80px; }
+  </style>
+</head>
+<body class="font-body-md text-body-md min-h-screen flex flex-col pb-nav">
+  
+  <div class="max-w-[412px] mx-auto w-full min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col pb-24">
+    
+    <!-- TopAppBar -->
+    <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center gap-3 px-gutter py-base border-b border-outline-variant/10 z-40">
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors" onclick="window.location.href='../'">
+        <span class="material-symbols-outlined text-on-surface-variant">arrow_back</span>
+      </button>
+      <h1 class="font-bold tracking-tight">Settings</h1>
+    </header>
+    
+    <main class="flex-grow w-full px-4 py-6 flex flex-col gap-6">
+      
+      <!-- Edit Profile form fields -->
+      <div class="bg-surface rounded-xl p-card-padding card-border flex flex-col gap-4 text-left">
+        <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase">Edit Profile Info</h3>
+        
+        <!-- Base64 Image Upload -->
+        <div class="flex flex-col gap-1">
+          <label class="text-3xs font-bold text-on-surface-variant uppercase">Profile Image</label>
+          <input class="bg-surface-container border border-outline-variant/50 rounded-lg p-2 text-xs text-primary input-glow-focus focus:outline-none focus:ring-0 file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-3xs file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:opacity-90 cursor-pointer" type="file" id="inpAvatarFile" accept="image/*"/>
+          <div class="flex items-center gap-3 mt-2">
+            <div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container flex items-center justify-center">
+              <img id="avatarPreview" alt="Preview avatar" class="w-full h-full object-cover hidden" src=""/>
+              <span id="avatarPreviewFallback" class="font-bold text-primary-fixed text-xs"></span>
+            </div>
+            <span class="text-3xs text-on-surface-variant italic">Preview of changes</span>
+          </div>
+        </div>
+        
+        <div class="flex flex-col gap-1">
+          <label class="text-3xs font-bold text-on-surface-variant uppercase">Full Name</label>
+          <input class="bg-surface-container border border-outline-variant/50 rounded-lg p-2 text-xs text-primary input-glow-focus focus:outline-none focus:ring-0" type="text" id="inpName" placeholder="Aarav Sharma"/>
+        </div>
+        
+        <div class="flex flex-col gap-1">
+          <label class="text-3xs font-bold text-on-surface-variant uppercase">Bio</label>
+          <textarea class="bg-surface-container border border-outline-variant/50 rounded-lg p-2 text-xs text-primary input-glow-focus focus:outline-none focus:ring-0 h-16 resize-none" id="inpBio" placeholder="Tell us about yourself..."></textarea>
+        </div>
+        
+        <div class="flex flex-col gap-1">
+          <label class="text-3xs font-bold text-on-surface-variant uppercase">GitHub Profile URL</label>
+          <input class="bg-surface-container border border-outline-variant/50 rounded-lg p-2 text-xs text-primary input-glow-focus focus:outline-none focus:ring-0" type="url" id="inpGit" placeholder="https://github.com/username"/>
+        </div>
+        
+        <div class="flex flex-col gap-1">
+          <label class="text-3xs font-bold text-on-surface-variant uppercase">LinkedIn Profile URL</label>
+          <input class="bg-surface-container border border-outline-variant/50 rounded-lg p-2 text-xs text-primary input-glow-focus focus:outline-none focus:ring-0" type="url" id="inpLinkedin" placeholder="https://linkedin.com/in/username"/>
+        </div>
+        
+        <button class="w-full bg-primary-fixed text-on-primary-fixed font-bold py-3.5 rounded-lg text-xs mt-2 active:scale-95 transition-transform" id="btnSaveProfile">
+          Save Changes
+        </button>
+      </div>
+      
+      <!-- Preferences Settings Options -->
+      <div class="flex flex-col gap-3 text-left">
+        <span class="font-label-sm text-xs font-bold text-on-surface-variant uppercase ml-1">Preferences & Session</span>
+        <div class="flex flex-col bg-surface rounded-xl card-border overflow-hidden">
+          
+          <!-- Notifications Settings Custom Icon Toggle -->
+          <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium" id="toggleNotifsBtn">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+              <div class="flex flex-col">
+                <span>Notification Settings</span>
+                <span class="text-3xs text-on-surface-variant" id="notifStatusLabel">Notifications: Enabled</span>
+              </div>
+            </div>
+            <!-- Custom SVG Container -->
+            <div class="w-8 h-8 flex items-center justify-center" id="notifSvgContainer">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+          
+          <!-- Theme Preferences Slide Toggle -->
+          <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium" id="toggleThemeBtn">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
+              <div class="flex flex-col">
+                <span>Dark Mode Theme</span>
+                <span class="text-3xs text-on-surface-variant" id="themeStatusLabel">Theme: Dark</span>
+              </div>
+            </div>
+            <!-- Custom Toggle Switch -->
+            <div class="relative w-10 h-6 bg-surface-container border border-outline-variant rounded-full transition-colors duration-200" id="themeSwitchBg">
+              <div class="absolute top-[2px] left-[2px] w-4.5 h-4.5 bg-text-muted rounded-full transition-transform duration-200" id="themeSwitchThumb"></div>
+            </div>
+          </div>
+          
+          <!-- Logout Button -->
+          <div class="flex justify-between items-center px-4 py-3.5 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium text-[#EF6464]" id="logoutBtn">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined">logout</span>
+              <span>Logout</span>
+            </div>
+            <span class="material-symbols-outlined text-base">chevron_right</span>
+          </div>
+          
+        </div>
+      </div>
+    </main>
+    
+    <!-- BottomNavBar -->
+    <nav class="fixed bottom-0 z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10 w-full max-w-[412px] left-1/2 -translate-x-1/2 shadow-lg">
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../../dashboard/">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-sm text-xs mt-1">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../../day/12/">
+        <span class="material-symbols-outlined">fitness_center</span>
+        <span class="font-label-sm text-xs mt-1">Challenge</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../../progress/">
+        <span class="material-symbols-outlined">leaderboard</span>
+        <span class="font-label-sm text-xs mt-1">Progress</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-primary-fixed drop-shadow-[0_0_8px_rgba(150,218,35,0.5)] p-2 active:scale-95 transition-all duration-200" href="../../profile/">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+        <span class="font-label-sm text-xs mt-1">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Logout Confirmation Modal Sheet -->
+  <div class="bottom-sheet-modal" id="logoutConfirmModal">
+    <div class="bottom-sheet">
+      <h3>Log out of ABTalks?</h3>
+      <p>Your challenge progress is safely stored in this demo.</p>
+      <div class="bottom-sheet-buttons flex gap-3 mt-4">
+        <button class="sheet-btn sheet-btn-cancel flex-grow py-3 rounded-lg" id="btnCancelLogout">Cancel</button>
+        <button class="sheet-btn sheet-btn-confirm flex-grow py-3 bg-[#EF6464] text-white rounded-lg" id="btnConfirmLogout">Log out</button>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module">
+    import { getState, saveState, logout, getTheme, setTheme, areNotificationsEnabled, setNotificationsEnabled } from '../../shared/state.js';
+    
+    const state = getState();
+    
+    // Map inputs
+    const inpFile = document.getElementById("inpAvatarFile");
+    const preview = document.getElementById("avatarPreview");
+    const previewFallback = document.getElementById("avatarPreviewFallback");
+    
+    const inpName = document.getElementById("inpName");
+    const inpBio = document.getElementById("inpBio");
+    const inpGit = document.getElementById("inpGit");
+    const inpLinkedin = document.getElementById("inpLinkedin");
+    
+    // Load initial values
+    let currentAvatarBase64 = state.profileAvatar || "";
+    inpName.value = state.profileName || "";
+    inpBio.value = state.profileBio || "";
+    inpGit.value = state.profileGithub || "";
+    inpLinkedin.value = state.profileLinkedin || "";
+    
+    const updatePreview = () => {
+      if (currentAvatarBase64) {
+        preview.src = currentAvatarBase64;
+        preview.classList.remove("hidden");
+        previewFallback.classList.add("hidden");
+      } else {
+        preview.classList.add("hidden");
+        previewFallback.classList.remove("hidden");
+        previewFallback.innerText = (inpName.value || "A").charAt(0);
+      }
+    };
+    updatePreview();
+    
+    // File upload reader
+    inpFile.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        currentAvatarBase64 = event.target.result;
+        updatePreview();
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    // Save Profile
+    document.getElementById("btnSaveProfile").addEventListener("click", () => {
+      state.profileAvatar = currentAvatarBase64;
+      state.profileName = inpName.value.trim() || "Aarav Sharma";
+      state.profileBio = inpBio.value.trim();
+      state.profileGithub = inpGit.value.trim();
+      state.profileLinkedin = inpLinkedin.value.trim();
+      
+      saveState(state);
+      alert("Profile updated successfully!");
+      window.location.href = "../";
+    });
+    
+    // --- Notification SVGs ---
+    const disableSvg = `
+      <svg class="text-on-surface-variant" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g fill="currentColor">
+          <path d="M43.4,29.4l-3.2-3.2A4.7,4.7,0,0,1,39,23.3V17C39,8.9,33.6,2,24,2A14.7,14.7,0,0,0,13.1,6.2L44,37.2V30.8A2,2,0,0,0,43.4,29.4Z"/>
+          <path d="M5.2,4.4a1.9,1.9,0,0,0-2.8,0,1.9,1.9,0,0,0,0,2.8l6.8,6.9A26.4,26.4,0,0,0,9,17v7a2.3,2.3,0,0,1-.7,1.7L4.6,29.4A2,2,0,0,0,4,30.8V38a2,2,0,0,0,2,2H17.1a7,7,0,0,0,13.8,0h4.3l3.6,3.6a2,2,0,1,0,2.8-2.8Z"/>
+        </g>
+      </svg>
+    `;
+    
+    const enableSvg = `
+      <svg class="text-primary-fixed" width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g fill="currentColor">
+          <path d="M32.85,28.13l-.34-.3A14.37,14.37,0,0,1,30,24.9a12.63,12.63,0,0,1-1.35-4.81V15.15A10.81,10.81,0,0,0,19.21,4.4V3.11a1.33,1.33,0,1,0-2.67,0V4.42A10.81,10.81,0,0,0,7.21,15.15v4.94A12.63,12.63,0,0,1,5.86,24.9a14.4,14.4,0,0,1-2.47,2.93l-.34.3v2.82H32.85Z"/>
+          <path d="M15.32,32a2.65,2.65,0,0,0,5.25,0Z"/>
+        </g>
+      </svg>
+    `;
+    
+    const toggleNotifsBtn = document.getElementById("toggleNotifsBtn");
+    const notifStatusLabel = document.getElementById("notifStatusLabel");
+    const notifSvgContainer = document.getElementById("notifSvgContainer");
+    
+    const updateNotifsUI = () => {
+      const enabled = areNotificationsEnabled();
+      notifStatusLabel.innerText = `Notifications: ${enabled ? 'Enabled' : 'Disabled'}`;
+      notifSvgContainer.innerHTML = enabled ? enableSvg : disableSvg;
+    };
+    
+    toggleNotifsBtn.addEventListener("click", () => {
+      const current = areNotificationsEnabled();
+      setNotificationsEnabled(!current);
+      updateNotifsUI();
+    });
+    updateNotifsUI();
+    
+    // --- Theme Slide Toggle ---
+    const toggleThemeBtn = document.getElementById("toggleThemeBtn");
+    const themeStatusLabel = document.getElementById("themeStatusLabel");
+    const themeSwitchBg = document.getElementById("themeSwitchBg");
+    const themeSwitchThumb = document.getElementById("themeSwitchThumb");
+    
+    const updateThemeUI = () => {
+      const activeTheme = getTheme();
+      themeStatusLabel.innerText = `Theme: ${activeTheme === 'dark' ? 'Dark Mode' : 'Light Mode'}`;
+      
+      if (activeTheme === "light") {
+        themeSwitchBg.style.backgroundColor = "var(--bg-surface-container)";
+        themeSwitchBg.style.borderColor = "var(--border-color)";
+        themeSwitchThumb.style.transform = "translateX(0px)";
+        themeSwitchThumb.style.backgroundColor = "var(--text-muted)";
+        
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light-theme");
+      } else {
+        themeSwitchBg.style.backgroundColor = "var(--accent-green)";
+        themeSwitchBg.style.borderColor = "var(--accent-green)";
+        themeSwitchThumb.style.transform = "translateX(16px)";
+        themeSwitchThumb.style.backgroundColor = "#000000";
+        
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light-theme");
+      }
+    };
+    
+    toggleThemeBtn.addEventListener("click", () => {
+      const current = getTheme();
+      setTheme(current === "dark" ? "light" : "dark");
+      updateThemeUI();
+    });
+    updateThemeUI();
+    
+    // --- Logout Dialog ---
+    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutConfirmModal = document.getElementById("logoutConfirmModal");
+    const btnCancelLogout = document.getElementById("btnCancelLogout");
+    const btnConfirmLogout = document.getElementById("btnConfirmLogout");
+
+    logoutBtn.addEventListener("click", () => {
+      logoutConfirmModal.classList.add("show");
+    });
+    const closeLogoutModal = () => {
+      logoutConfirmModal.classList.remove("show");
+    };
+    btnCancelLogout.addEventListener("click", closeLogoutModal);
+    logoutConfirmModal.addEventListener("click", (e) => {
+      if (e.target === logoutConfirmModal) closeLogoutModal();
+    });
+    btnConfirmLogout.addEventListener("click", () => {
+      logout();
+    });
+  </script>
+</body>
+</html>

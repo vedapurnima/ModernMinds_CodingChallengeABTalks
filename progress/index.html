@@ -97,8 +97,8 @@
     <!-- TopAppBar -->
     <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
       <h1 class="font-bold tracking-tight">Progress</h1>
-      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors">
-        <span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors notification-btn relative">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
       </button>
     </header>
     
@@ -189,7 +189,7 @@
     </main>
     
     <!-- BottomNavBar -->
-    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+    <nav class="fixed bottom-0 z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10 w-full max-w-[412px] left-1/2 -translate-x-1/2 shadow-lg">
       <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../dashboard/">
         <span class="material-symbols-outlined">home</span>
         <span class="font-label-sm text-xs mt-1">Home</span>
