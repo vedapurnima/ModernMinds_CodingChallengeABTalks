@@ -1,361 +1,243 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Profile - ABTalks</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Hanken+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../shared/global.css">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "var(--bg-main)",
+            "surface": "var(--bg-card)",
+            "surface-dim": "var(--bg-surface-dim)",
+            "surface-container": "var(--bg-surface-container)",
+            "surface-container-highest": "var(--bg-surface-container-highest)",
+            "on-surface": "var(--text-primary)",
+            "on-surface-variant": "var(--text-secondary)",
+            "primary-fixed": "var(--accent-green)",
+            "primary-fixed-dim": "var(--accent-green-dim)",
+            "secondary": "var(--accent-blue)",
+            "tertiary-fixed-dim": "var(--accent-purple)",
+            "outline-variant": "var(--border-color)",
+            "primary": "var(--text-primary)",
+            "on-primary-fixed": "#111f00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "8px",
+            "gutter": "16px",
+            "section-gap": "40px",
+            "container-margin": "24px",
+            "card-padding": "20px"
+          },
+          "fontFamily": {
+            "body-md": ["Geist"],
+            "headline-lg": ["Hanken Grotesk"],
+            "display-xl": ["Hanken Grotesk"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-xl": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <script>
+    if (localStorage.getItem("abt_theme") === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light-theme");
+    }
+  </script>
+  
   <style>
-    .profile-card-top {
-      text-align: center;
-      padding: 10px 20px 25px 20px;
-    }
+    body { background-color: var(--bg-main); color: var(--text-primary); }
+    .card-border { border: 1px solid var(--border-color); }
     
-    .large-avatar-wrapper {
-      position: relative;
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-orange), var(--accent-blue));
-      margin: 0 auto 15px auto;
-      box-shadow: 0 0 20px rgba(163, 255, 51, 0.15);
-    }
-    
-    .large-avatar-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background-color: var(--bg-card);
-    }
-    
-    .profile-name {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-    }
-    
-    .profile-bio {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      max-width: 280px;
-      margin: 0 auto 20px auto;
-    }
-    
-    .profile-socials {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 25px;
-    }
-    
-    .social-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 8px 16px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-    
-    .social-btn:hover {
-      background-color: var(--bg-card-hover);
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-    
-    .social-btn svg {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
-    }
-    
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      padding: 0 20px;
-      margin-bottom: 25px;
-    }
-    
-    .stat-box {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 15px 10px;
-      text-align: center;
-    }
-    
-    .stat-box-lbl {
-      font-size: 8px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 8px;
-    }
-    
-    .stat-box-val {
-      font-family: 'Outfit', sans-serif;
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
-    
-    .stat-box-val span {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    
-    /* Trophy Case Grid */
-    .trophy-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 12px;
-    }
-    
-    .trophy-box {
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 16px;
-      text-align: center;
-      transition: all var(--transition-normal);
-      opacity: 0.4;
-      filter: grayscale(1);
-    }
-    
-    .trophy-box.unlocked {
-      opacity: 1;
-      filter: none;
-      background-color: var(--bg-card);
-      border-color: rgba(255, 122, 0, 0.15);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-    }
-    
-    .trophy-icon-glow {
-      font-size: 32px;
-      margin-bottom: 8px;
-      display: block;
-      filter: drop-shadow(0 0 5px rgba(255,122,0,0));
-      transition: filter var(--transition-normal);
-    }
-    
-    .trophy-box.unlocked .trophy-icon-glow {
-      filter: drop-shadow(0 0 8px rgba(255, 122, 0, 0.4));
-    }
-    
-    .trophy-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-    
-    .trophy-desc {
-      font-size: 10px;
-      color: var(--text-secondary);
-    }
-    
-    /* Settings List */
-    .settings-list {
-      display: flex;
-      flex-direction: column;
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      margin: 0 20px 25px 20px;
-      overflow: hidden;
-    }
-    
-    .settings-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: background var(--transition-fast);
-    }
-    
-    .settings-item:hover {
-      background-color: var(--bg-card-hover);
-    }
-    
-    .settings-item:last-child {
-      border-bottom: none;
-    }
-    
-    .settings-item svg {
-      width: 16px;
-      height: 16px;
-      stroke: var(--text-muted);
-      stroke-width: 2;
-      fill: none;
-    }
-    
-    .settings-item-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .settings-item-left svg {
-      width: 18px;
-      height: 18px;
-      stroke: var(--text-secondary);
-    }
+    .pb-nav { padding-bottom: 80px; }
   </style>
 </head>
-<body>
-  <div class="app-container">
+<body class="font-body-md text-body-md min-h-screen flex flex-col pb-nav">
+  
+  <div class="max-w-[412px] mx-auto w-full min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col pb-24">
     
-    <div class="header">
-      <div style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 18px;">Profile</div>
-      <button class="notification-btn" style="border-radius: 12px; width: 34px; height: 34px;">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
+    <!-- TopAppBar -->
+    <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
+      <h1 class="font-bold tracking-tight">Profile</h1>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">settings</span>
       </button>
-    </div>
+    </header>
     
-    <!-- Profile Info Card -->
-    <div class="profile-card-top">
-      <div class="large-avatar-wrapper">
-        <img class="large-avatar-img" id="profileAvatar" src="" alt="Avatar">
-      </div>
-      <h2 class="profile-name" id="profileName">Aarav Sharma</h2>
-      <p class="profile-bio" id="profileBio">Full-stack Developer & 60-day Builder. Currently mastering responsive design.</p>
+    <main class="flex-grow w-full px-4 py-6 flex flex-col gap-6">
       
-      <div class="profile-socials">
-        <button class="social-btn" onclick="window.open('https://github.com', '_blank')">
-          <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          GitHub
-        </button>
-        <button class="social-btn" onclick="window.open('https://linkedin.com', '_blank')">
-          <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          LinkedIn
-        </button>
-      </div>
-    </div>
-    
-    <!-- Stats Grid -->
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-box-lbl">Streak</div>
-        <div class="stat-box-val" id="statStreak" style="color: var(--accent-orange);">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-box-lbl">Completed</div>
-        <div class="stat-box-val" id="statCompleted">0<span>/60</span></div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-box-lbl">Unlocked</div>
-        <div class="stat-box-val" id="statAchievements" style="color: var(--accent-purple);">0</div>
-      </div>
-    </div>
-    
-    <!-- Account Settings -->
-    <div class="card-title" style="margin: 10px 20px 10px 20px;">Account</div>
-    <div class="settings-list">
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-          </svg>
-          <span>Notification Settings</span>
+      <!-- Profile Header top card info -->
+      <div class="text-center py-4 flex flex-col items-center">
+        <div class="relative w-20 h-20 rounded-full overflow-hidden border-2 border-primary-fixed mb-4 shadow-[0_0_15px_rgba(184,255,74,0.3)]">
+          <img id="profileAvatar" alt="User avatar" class="w-full h-full object-cover" src="">
         </div>
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </div>
-      <div class="settings-item">
-        <div class="settings-item-left">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <span>Theme Preferences</span>
+        <h2 class="font-headline-lg-mobile text-xl font-bold text-primary mb-1" id="profileName">Aarav Sharma</h2>
+        <p class="text-xs text-on-surface-variant max-w-[280px] leading-relaxed mb-4" id="profileBio">Full-stack Developer & 60-day Builder. Currently mastering responsive design.</p>
+        
+        <div class="flex gap-3">
+          <button class="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg card-border text-xs font-bold text-primary hover:bg-surface-container transition-colors" onclick="window.open('https://github.com', '_blank')">
+            <span class="material-symbols-outlined text-sm">code</span> GitHub
+          </button>
+          <button class="flex items-center gap-2 px-4 py-2 bg-surface rounded-lg card-border text-xs font-bold text-primary hover:bg-surface-container transition-colors" onclick="window.open('https://linkedin.com', '_blank')">
+            <span class="material-symbols-outlined text-sm">share</span> LinkedIn
+          </button>
         </div>
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
       </div>
-      <div class="settings-item" id="logoutBtn">
-        <div class="settings-item-left" style="color: #ef4444;">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="stroke: #ef4444;">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
-          </svg>
-          <span>Logout</span>
+      
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-surface rounded-xl p-3 card-border text-center">
+          <span class="block text-3xs font-bold text-on-surface-variant uppercase mb-1">Streak</span>
+          <span class="font-display-xl text-xl font-extrabold text-orange-400" id="statStreak">0</span>
         </div>
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
+        
+        <div class="bg-surface rounded-xl p-3 card-border text-center">
+          <span class="block text-3xs font-bold text-on-surface-variant uppercase mb-1">Completed</span>
+          <span class="font-display-xl text-xl font-extrabold text-primary" id="statCompleted">0<span class="text-3xs text-on-surface-variant font-bold">/60</span></span>
+        </div>
+        
+        <div class="bg-surface rounded-xl p-3 card-border text-center">
+          <span class="block text-3xs font-bold text-on-surface-variant uppercase mb-1">Unlocked</span>
+          <span class="font-display-xl text-xl font-extrabold text-tertiary-fixed-dim" id="statAchievements">0</span>
+        </div>
+      </div>
+      
+      <!-- Trophy Case -->
+      <div class="bg-surface rounded-xl p-card-padding card-border">
+        <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase mb-4">Trophy Case</h3>
+        <div class="grid grid-cols-2 gap-3" id="trophyGrid">
+          <!-- Achievements injected dynamically -->
+        </div>
+      </div>
+      
+      <!-- Proof of Work Section -->
+      <div class="bg-surface rounded-xl p-card-padding card-border" id="proofOfWorkSection">
+        <div class="flex flex-col gap-1 mb-4">
+          <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase">Proof of Work</h3>
+          <h4 class="font-headline-md text-sm font-bold text-primary">Your builds, documented.</h4>
+        </div>
+        <p class="text-3xs text-on-surface-variant mb-4">Every challenge you complete becomes visible proof of what you can build.</p>
+        
+        <div class="flex flex-col gap-4" id="powContainer">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+      
+      <!-- Account Settings -->
+      <div class="flex flex-col gap-3">
+        <span class="font-label-sm text-xs font-bold text-on-surface-variant uppercase ml-1">Account</span>
+        <div class="flex flex-col bg-surface rounded-xl card-border overflow-hidden">
+          
+          <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+              <span>Notification Settings</span>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant text-base">chevron_right</span>
+          </div>
+          
+          <div class="flex justify-between items-center px-4 py-3.5 border-b border-outline-variant/30 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium" id="themePrefBtn">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
+              <div class="flex flex-col">
+                <span>Theme Preferences</span>
+                <span class="text-3xs text-on-surface-variant" id="themeStatusLabel">Appearance: Dark</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-on-surface-variant text-base">chevron_right</span>
+          </div>
+          
+          <div class="flex justify-between items-center px-4 py-3.5 hover:bg-surface-container transition-colors cursor-pointer text-sm font-medium text-[#EF6464]" id="logoutBtn">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined">logout</span>
+              <span>Logout</span>
+            </div>
+            <span class="material-symbols-outlined text-base">chevron_right</span>
+          </div>
+          
+        </div>
+      </div>
+    </main>
+    
+    <!-- BottomNavBar -->
+    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../dashboard/">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-sm text-xs mt-1">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../day/12/">
+        <span class="material-symbols-outlined">fitness_center</span>
+        <span class="font-label-sm text-xs mt-1">Challenge</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../progress/">
+        <span class="material-symbols-outlined">leaderboard</span>
+        <span class="font-label-sm text-xs mt-1">Progress</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-primary-fixed drop-shadow-[0_0_8px_rgba(150,218,35,0.5)] p-2 active:scale-95 transition-all duration-200" href="../profile/">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+        <span class="font-label-sm text-xs mt-1">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Logout Confirmation Modal Sheet -->
+  <div class="bottom-sheet-modal" id="logoutConfirmModal">
+    <div class="bottom-sheet">
+      <h3>Log out of ABTalks?</h3>
+      <p>Your challenge progress is safely stored in this demo.</p>
+      <div class="bottom-sheet-buttons">
+        <button class="sheet-btn sheet-btn-cancel" id="btnCancelLogout">Cancel</button>
+        <button class="sheet-btn sheet-btn-confirm" id="btnConfirmLogout">Log out</button>
       </div>
     </div>
-    
-    <!-- Trophy Case -->
-    <div class="card" style="margin-top: 15px;">
-      <div class="card-title">Trophy Case</div>
-      <div class="trophy-grid" id="trophyGrid">
-        <!-- Injected dynamically -->
+  </div>
+
+  <!-- Theme Preferences Modal Sheet -->
+  <div class="bottom-sheet-modal" id="themePrefsModal">
+    <div class="bottom-sheet">
+      <h3>Theme Preferences</h3>
+      <div class="theme-options-list">
+        <div class="theme-option-item" id="optThemeDark" data-theme="dark">
+          <span>Dark Mode</span>
+          <div class="theme-radio"></div>
+        </div>
+        <div class="theme-option-item" id="optThemeLight" data-theme="light">
+          <span>Light Mode</span>
+          <div class="theme-radio"></div>
+        </div>
       </div>
+      <button class="w-full bg-primary-fixed text-on-primary-fixed font-bold py-3 rounded-lg" id="btnCloseTheme">Close</button>
     </div>
-    
-    <!-- Navigation Bar -->
-    <div class="bottom-nav">
-      <div class="nav-item" onclick="window.location.href='../dashboard/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-        <span>Home</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../day/12/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-        <span>Challenge</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../progress/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="20" x2="18" y2="10"></line>
-          <line x1="12" y1="20" x2="12" y2="4"></line>
-          <line x1="6" y1="20" x2="6" y2="14"></line>
-        </svg>
-        <span>Progress</span>
-      </div>
-      <div class="nav-item active" onclick="window.location.href='../profile/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Profile</span>
-      </div>
-    </div>
-    
   </div>
   
   <script type="module">
-    import { getState, resetAllStates } from '../shared/state.js';
+    import { getState, logout, getTheme, setTheme } from '../shared/state.js';
     
     const state = getState();
     
@@ -380,18 +262,10 @@
     
     // Set Profile statistics
     document.getElementById("statStreak").innerText = state.streak;
-    document.getElementById("statCompleted").innerHTML = `${state.completedCount}<span>/60</span>`;
+    document.getElementById("statCompleted").innerHTML = `${state.completedCount}<span class="text-2xs font-bold text-on-surface-variant">/60</span>`;
     
     const unlockedCount = state.achievements.filter(a => a.unlocked).length;
     document.getElementById("statAchievements").innerText = unlockedCount;
-    
-    // Logout Handler (clears localStorage and redirects to Landing Page)
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      if (confirm("Are you sure you want to logout? This will reset all local states.")) {
-        resetAllStates();
-        window.location.href = '../';
-      }
-    });
     
     // Render Trophy grid
     const trophyGrid = document.getElementById("trophyGrid");
@@ -406,14 +280,178 @@
     
     state.achievements.forEach(ach => {
       const box = document.createElement("div");
-      box.className = `trophy-box ${ach.unlocked ? 'unlocked' : ''}`;
+      box.className = `flex flex-col items-center text-center p-3 bg-surface-container/40 border border-outline-variant/35 rounded-xl transition-all duration-300`;
+      
+      if (!ach.unlocked) {
+        box.style.opacity = "0.3";
+        box.style.filter = "grayscale(1)";
+      } else {
+        box.style.borderColor = "var(--accent-green)";
+        box.style.boxShadow = "0 4px 10px rgba(0,0,0,0.15)";
+      }
+      
       box.innerHTML = `
-        <span class="trophy-icon-glow">${achievementEmojis[ach.id] || '🏆'}</span>
-        <div class="trophy-name">${ach.title}</div>
-        <div class="trophy-desc">${ach.desc}</div>
+        <span class="text-3xl mb-1">${achievementEmojis[ach.id] || '🏆'}</span>
+        <div class="text-xs font-bold text-primary">${ach.title}</div>
+        <div class="text-3xs text-on-surface-variant mt-0.5">${ach.desc}</div>
       `;
       trophyGrid.appendChild(box);
     });
+
+    // --- Dynamic Proof of Work ---
+    const powContainer = document.getElementById("powContainer");
+    
+    const mockBuilds = [
+      {
+        day: 11,
+        title: "Responsive Landing Page Redux",
+        desc: "Rebuilt a responsive landing page using modern CSS Grid and container queries.",
+        tech: "Layout (Flex/Grid)",
+        githubVerified: true,
+        linkedinVerified: true
+      },
+      {
+        day: 10,
+        title: "Auth Flow Implementation",
+        desc: "Integrated OAuth providers and JWT session management for a modern authentication flow.",
+        tech: "Authentication",
+        githubVerified: true,
+        linkedinVerified: true
+      },
+      {
+        day: 9,
+        title: "API Rate Limiter Service",
+        desc: "Built a Redis-backed sliding window rate limiter for a REST API.",
+        tech: "API Integration",
+        githubVerified: true,
+        linkedinVerified: true
+      }
+    ];
+
+    if (state.day12CodeVerified && state.day12SocialVerified) {
+      mockBuilds.unshift({
+        day: 12,
+        title: "Build a responsive developer profile card",
+        desc: "Mastered Flexbox and CSS Grid to create a fluid, responsive profile card that looks exceptional on mobile.",
+        tech: "Layout (Flex/Grid)",
+        githubVerified: true,
+        linkedinVerified: true
+      });
+    }
+
+    const visibleBuilds = mockBuilds.filter(b => state.completedDays.includes(b.day));
+
+    if (visibleBuilds.length === 0) {
+      powContainer.innerHTML = `
+        <div class="text-center p-6 bg-surface-container/50 border border-outline-variant/30 rounded-xl">
+          <div class="text-sm font-bold text-primary mb-1">Your proof starts here.</div>
+          <div class="text-xs text-on-surface-variant mb-4">Complete your first challenge and your work will appear here.</div>
+          <button class="px-4 py-2 bg-primary-fixed text-on-primary-fixed font-bold text-xs rounded-lg active:scale-95" onclick="window.location.href='../day/12/'">Start Day 1 →</button>
+        </div>
+      `;
+    } else {
+      powContainer.innerHTML = "";
+      visibleBuilds.forEach(b => {
+        const card = document.createElement("div");
+        card.className = "bg-surface-container/30 border border-outline-variant/30 rounded-xl p-4 flex flex-col gap-3";
+
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="text-3xs font-label-sm text-primary-fixed font-bold">DAY ${b.day < 10 ? '0'+b.day : b.day}</span>
+            <span class="text-3xs font-bold px-2 py-0.5 bg-surface-container border border-outline-variant rounded text-on-surface-variant">${b.tech}</span>
+          </div>
+          <div class="text-sm font-bold text-primary">${b.title}</div>
+          <div class="text-xs text-on-surface-variant leading-relaxed">"${b.desc}"</div>
+          
+          <div class="flex flex-col gap-1 my-1 text-xs font-semibold">
+            <span class="text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-xs">verified</span> Verified GitHub</span>
+            <span class="text-accent-pink flex items-center gap-1"><span class="material-symbols-outlined text-xs">verified</span> Verified LinkedIn</span>
+          </div>
+          
+          <div class="flex gap-3 mt-1">
+            <button class="flex-1 py-2 px-3 bg-secondary/15 border border-secondary/35 text-secondary text-2xs font-bold rounded-lg" onclick="window.open('https://github.com', '_blank')">View GitHub</button>
+            <button class="flex-1 py-2 px-3 bg-accent-pink/15 border border-accent-pink/35 text-accent-pink text-2xs font-bold rounded-lg" onclick="window.open('https://linkedin.com', '_blank')">View LinkedIn</button>
+          </div>
+        `;
+        powContainer.appendChild(card);
+      });
+    }
+
+    // --- Logout confirmation sheets ---
+    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutConfirmModal = document.getElementById("logoutConfirmModal");
+    const btnCancelLogout = document.getElementById("btnCancelLogout");
+    const btnConfirmLogout = document.getElementById("btnConfirmLogout");
+
+    logoutBtn.addEventListener("click", () => {
+      logoutConfirmModal.classList.add("show");
+    });
+
+    const closeLogoutModal = () => {
+      logoutConfirmModal.classList.remove("show");
+    };
+
+    btnCancelLogout.addEventListener("click", closeLogoutModal);
+    logoutConfirmModal.addEventListener("click", (e) => {
+      if (e.target === logoutConfirmModal) closeLogoutModal();
+    });
+
+    btnConfirmLogout.addEventListener("click", () => {
+      logout();
+    });
+
+    // --- Theme Selector Dialog Handlers ---
+    const themePrefBtn = document.getElementById("themePrefBtn");
+    const themePrefsModal = document.getElementById("themePrefsModal");
+    const btnCloseTheme = document.getElementById("btnCloseTheme");
+    const optThemeDark = document.getElementById("optThemeDark");
+    const optThemeLight = document.getElementById("optThemeLight");
+    const themeStatusLabel = document.getElementById("themeStatusLabel");
+
+    const updateThemeUI = () => {
+      const activeTheme = getTheme();
+      themeStatusLabel.innerText = `Appearance: ${activeTheme.charAt(0).toUpperCase() + activeTheme.slice(1)}`;
+      
+      if (activeTheme === "light") {
+        optThemeLight.classList.add("active");
+        optThemeDark.classList.remove("active");
+        
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light-theme");
+      } else {
+        optThemeDark.classList.add("active");
+        optThemeLight.classList.remove("active");
+        
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light-theme");
+      }
+    };
+
+    themePrefBtn.addEventListener("click", () => {
+      updateThemeUI();
+      themePrefsModal.classList.add("show");
+    });
+
+    const closeThemeModal = () => {
+      themePrefsModal.classList.remove("show");
+    };
+
+    btnCloseTheme.addEventListener("click", closeThemeModal);
+    themePrefsModal.addEventListener("click", (e) => {
+      if (e.target === themePrefsModal) closeThemeModal();
+    });
+
+    optThemeDark.addEventListener("click", () => {
+      setTheme("dark");
+      updateThemeUI();
+    });
+
+    optThemeLight.addEventListener("click", () => {
+      setTheme("light");
+      updateThemeUI();
+    });
+
+    updateThemeUI();
   </script>
 </body>
 </html>

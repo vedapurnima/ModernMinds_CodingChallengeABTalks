@@ -1,490 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Day 12 Challenge - ABTalks</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ABTalks - Day 12 Challenge</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Hanken+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../../shared/global.css">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "var(--bg-main)",
+            "surface": "var(--bg-card)",
+            "surface-dim": "var(--bg-surface-dim)",
+            "surface-container": "var(--bg-surface-container)",
+            "surface-container-highest": "var(--bg-surface-container-highest)",
+            "on-surface": "var(--text-primary)",
+            "on-surface-variant": "var(--text-secondary)",
+            "primary-fixed": "var(--accent-green)",
+            "primary-fixed-dim": "var(--accent-green-dim)",
+            "secondary": "var(--accent-blue)",
+            "tertiary-fixed-dim": "var(--accent-purple)",
+            "outline-variant": "var(--border-color)",
+            "primary": "var(--text-primary)",
+            "on-primary-fixed": "#111f00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "8px",
+            "gutter": "16px",
+            "section-gap": "40px",
+            "container-margin": "24px",
+            "card-padding": "20px"
+          },
+          "fontFamily": {
+            "body-md": ["Geist"],
+            "headline-lg": ["Hanken Grotesk"],
+            "display-xl": ["Hanken Grotesk"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-xl": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <script>
+    if (localStorage.getItem("abt_theme") === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light-theme");
+    }
+  </script>
+  
   <style>
-    .day-subtitle {
-      font-size: 11px;
-      font-family: 'Fira Code', monospace;
-      color: var(--accent-orange);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin: 20px 20px 8px 20px;
+    body { background-color: var(--bg-main); color: var(--text-primary); }
+    .glow-bloom-purple { box-shadow: 0 0 12px 2px rgba(206, 189, 255, 0.15); }
+    .glow-bloom-cyan { box-shadow: 0 0 12px 2px rgba(77, 227, 210, 0.15); }
+    .glow-bloom-lime { box-shadow: 0 0 12px 2px rgba(184, 255, 74, 0.15); }
+    .glow-bloom-blue { box-shadow: 0 0 12px 2px rgba(91, 167, 255, 0.15); }
+    
+    .border-glow-focus:focus-within {
+      border-color: #5BA7FF;
+      box-shadow: inset 0 0 8px rgba(91, 167, 255, 0.2);
     }
     
-    .day-title {
-      font-size: 34px;
-      line-height: 1.15;
-      font-weight: 800;
-      margin: 0 20px 24px 20px;
-      color: var(--text-primary);
-    }
-    
-    /* Goal Card specific dot styling */
-    .goal-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: var(--accent-purple);
-      box-shadow: 0 0 8px var(--accent-purple);
-    }
-    
-    .goal-text {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-    
-    /* Code block container */
-    .code-block-container {
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 15px;
-      font-family: 'Fira Code', monospace;
-      font-size: 12px;
-      color: #cbd5e1;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-    
-    .code-tag {
-      color: var(--accent-green);
-    }
-    
-    /* Acceptance Criteria checklist */
-    .criteria-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .criteria-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-    }
-    
-    .criteria-item:hover {
-      background-color: var(--bg-card-hover);
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-    
-    .criteria-checkbox {
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      border: 2px solid var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all var(--transition-fast);
-      flex-shrink: 0;
-    }
-    
-    .criteria-item.checked .criteria-checkbox {
-      background-color: var(--accent-green);
-      border-color: var(--accent-green);
-      box-shadow: 0 0 10px rgba(163, 255, 51, 0.4);
-    }
-    
-    .criteria-checkbox svg {
-      width: 14px;
-      height: 14px;
-      stroke: #000000;
-      stroke-width: 3;
-      fill: none;
-      display: none;
-    }
-    
-    .criteria-item.checked .criteria-checkbox svg {
-      display: block;
-    }
-    
-    .criteria-text {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      transition: all var(--transition-fast);
-    }
-    
-    .criteria-item.checked .criteria-text {
-      color: var(--text-primary);
-      text-decoration: line-through;
-      opacity: 0.6;
-    }
-    
-    /* Submission Form */
-    .submit-section-title {
-      font-size: 18px;
-      margin: 10px 20px 15px 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .submit-section-title svg {
-      width: 20px;
-      height: 20px;
-      stroke: var(--text-secondary);
-      stroke-width: 2.2;
-      fill: none;
-    }
-    
-    .input-wrapper {
-      position: relative;
-      margin-bottom: 12px;
-    }
-    
-    .input-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      stroke: var(--text-muted);
-      stroke-width: 2;
-      fill: none;
-    }
-    
-    .form-input {
-      width: 100%;
-      background-color: var(--bg-input);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 14px 14px 14px 42px;
-      color: var(--text-primary);
-      font-size: 13px;
-      outline: none;
-      font-family: 'Fira Code', monospace;
-      transition: all var(--transition-fast);
-    }
-    
-    .form-input:focus {
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-    
-    /* Verified Status Indicator */
-    .verified-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--accent-green);
-      font-size: 12px;
-      font-weight: 600;
-    }
-    
-    /* Success Overlay/Modal */
-    .success-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(5, 6, 8, 0.95);
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition-normal);
-    }
-    
-    .success-modal.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    
-    .success-card {
-      background: var(--bg-card);
-      border: 1.5px solid var(--accent-green);
-      border-radius: 24px;
-      padding: 30px;
-      width: 100%;
-      max-width: 350px;
-      text-align: center;
-      transform: scale(0.9);
-      transition: transform var(--transition-normal);
-      box-shadow: 0 10px 40px rgba(163, 255, 51, 0.15);
-    }
-    
-    .success-modal.show .success-card {
-      transform: scale(1);
-    }
-    
-    .success-flame-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: rgba(255, 122, 0, 0.1);
-      border: 2px solid rgba(255, 122, 0, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px auto;
-      box-shadow: 0 0 20px rgba(255, 122, 0, 0.2);
-    }
-    
-    .success-flame-circle svg {
-      width: 50px;
-      height: 50px;
-    }
-    
-    .success-title {
-      font-size: 24px;
-      color: var(--text-primary);
-      margin-bottom: 10px;
-    }
-    
-    .success-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 24px;
-    }
-    
-    /* Loading Spinner */
-    .spinner {
-      border: 3px solid rgba(255,255,255,0.1);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border-left-color: currentColor;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    .pb-nav { padding-bottom: 80px; }
   </style>
 </head>
-<body>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col pb-nav">
+  
   <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
   
-  <div class="app-container">
+  <div class="max-w-[412px] mx-auto w-full min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col pb-24">
     
-    <div class="header">
-      <div class="user-profile-header">
-        <div class="avatar-wrapper">
-          <img class="avatar-img" id="headerAvatar" src="" alt="Avatar">
+    <!-- TopAppBar -->
+    <header class="w-full bg-surface flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest border border-outline-variant">
+          <img id="headerAvatar" alt="User Profile Avatar" class="w-full h-full object-cover" src=""/>
         </div>
-        <div>
-          <div class="greeting-text" id="greetingTime">Good evening,</div>
-          <div class="greeting-name" id="headerName">Dev</div>
-        </div>
+        <h1 class="font-headline-md text-sm font-bold text-on-surface"><span id="greetingTime">Good evening</span>, <span id="headerName">Dev</span> 👋</h1>
       </div>
-      <button class="notification-btn">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors group">
+        <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">notifications</span>
       </button>
-    </div>
+    </header>
     
-    <div class="day-subtitle" id="dayIndicator">DAY 12 OF 60</div>
-    <h1 class="day-title" id="dayTitle">Build a responsive developer profile card</h1>
-    
-    <!-- Today's Goal -->
-    <div class="card">
-      <div class="card-title">
-        <span>Goal</span>
-        <div class="goal-dot"></div>
-      </div>
-      <p class="goal-text" id="goalText">
-        Master Flexbox and CSS Grid to create a fluid, responsive profile card that looks exceptional on mobile devices and gracefully expands for desktop views. Focus on semantic HTML and accessibility best practices.
-      </p>
-    </div>
-    
-    <!-- What to Build -->
-    <div class="card">
-      <div class="card-title" style="color: var(--accent-blue);">What to Build</div>
-      <div class="code-block-container" id="codeBlock">
-<span class="code-tag">&lt;div</span> class="profile-card"<span class="code-tag">&gt;</span>
-  A clean, modern developer business card designed for web. It must include an avatar, bio, tech stack pills, and at least two functional social links.
-<span class="code-tag">&lt;/div&gt;</span>
-      </div>
-    </div>
-    
-    <!-- Acceptance Criteria -->
-    <div class="card">
-      <div class="card-title" style="color: var(--accent-green);">Acceptance Criteria</div>
-      <div class="criteria-list">
-        <div class="criteria-item" id="crit1" data-index="0">
-          <div class="criteria-checkbox">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
+    <!-- Main Content -->
+    <main class="flex-grow w-full px-5 py-8 flex flex-col gap-6">
+      
+      <!-- Header Section -->
+      <section class="animate-fade-in-up">
+        <p class="font-label-sm text-xs font-bold text-primary-fixed uppercase tracking-wider mb-2" id="dayIndicator">DAY 12 OF 60</p>
+        <h2 class="font-display-xl text-2xl font-bold text-primary leading-tight" id="dayTitle">Build a responsive developer profile card</h2>
+      </section>
+      
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 gap-6">
+        
+        <!-- TODAY'S GOAL (Purple) -->
+        <div class="bg-surface rounded-xl border border-tertiary-fixed-dim/30 p-card-padding relative overflow-hidden group glow-bloom-purple transition-all duration-300 hover:border-tertiary-fixed-dim">
+          <div class="absolute inset-0 bg-tertiary-fixed-dim/5 pointer-events-none"></div>
+          <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-tertiary-fixed-dim shadow-[0_0_8px_rgba(206,189,255,0.8)] animate-pulse"></div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-tertiary-fixed-dim">target</span>
+            <h3 class="font-headline-md text-tertiary-fixed-dim uppercase text-xs tracking-widest font-bold">Today's Goal</h3>
           </div>
-          <span class="criteria-text" id="critText1">Profile image/avatar with fallback state</span>
+          <p class="text-on-surface-variant text-sm leading-relaxed" id="goalText">
+            Master Flexbox and CSS Grid to create a fluid, responsive profile card that looks exceptional on mobile devices and gracefully expands for desktop views. Focus on semantic HTML and accessibility best practices.
+          </p>
         </div>
-        <div class="criteria-item" id="crit2" data-index="1">
-          <div class="criteria-checkbox">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
+        
+        <!-- WHAT TO BUILD (Cyan) -->
+        <div class="bg-surface rounded-xl border border-[#4DE3D2]/30 p-card-padding relative overflow-hidden group glow-bloom-cyan transition-all duration-300 hover:border-[#4DE3D2]">
+          <div class="absolute inset-0 bg-[#4DE3D2]/5 pointer-events-none"></div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-[#4DE3D2]">build</span>
+            <h3 class="font-headline-md text-[#4DE3D2] uppercase text-xs tracking-widest font-bold">What to Build</h3>
           </div>
-          <span class="criteria-text" id="critText2">Social links (GitHub, LinkedIn, Twitter)</span>
-        </div>
-        <div class="criteria-item" id="crit3" data-index="2">
-          <div class="criteria-checkbox">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
+          <div class="bg-surface-container rounded-lg p-4 border border-outline-variant/50">
+            <p class="text-on-surface-variant text-xs font-label-sm leading-relaxed" id="codeBlock">
+              <span class="text-primary">&lt;div class="profile-card"&gt;</span><br/>
+              &nbsp;&nbsp;A clean, modern developer business card designed for web. It must include an avatar, bio, tech stack pills, and at least two functional social links.<br/>
+              <span class="text-primary">&lt;/div&gt;</span>
+            </p>
           </div>
-          <span class="criteria-text" id="critText3">Fully responsive layout (Mobile → Desktop)</span>
+        </div>
+        
+        <!-- ACCEPTANCE CRITERIA (Lime) -->
+        <div class="bg-surface rounded-xl border border-primary-fixed-dim/30 p-card-padding relative overflow-hidden group glow-bloom-lime transition-all duration-300 hover:border-primary-fixed-dim">
+          <div class="absolute inset-0 bg-primary-fixed-dim/5 pointer-events-none"></div>
+          <div class="flex items-center gap-2 mb-6">
+            <span class="material-symbols-outlined text-primary-fixed">checklist</span>
+            <h3 class="font-headline-md text-primary-fixed uppercase text-xs tracking-widest font-bold">Acceptance Criteria</h3>
+          </div>
+          <div class="space-y-3">
+            
+            <!-- Task Item 1 -->
+            <label class="flex items-center gap-4 p-3 rounded-lg bg-surface-container hover:bg-surface-container-highest border border-outline-variant/30 cursor-pointer transition-colors group/item" id="crit1" data-index="0">
+              <div class="relative flex items-center justify-center w-6 h-6 rounded border-2 border-outline-variant group-hover/item:border-primary-fixed transition-colors criteria-chk-box">
+                <span class="material-symbols-outlined text-[18px] text-primary-fixed opacity-0 check-icon">check</span>
+              </div>
+              <span class="text-on-surface text-sm group-hover/item:text-primary transition-colors crit-text" id="critText1">Profile image/avatar with fallback state</span>
+            </label>
+            
+            <!-- Task Item 2 -->
+            <label class="flex items-center gap-4 p-3 rounded-lg bg-surface-container hover:bg-surface-container-highest border border-outline-variant/30 cursor-pointer transition-colors group/item" id="crit2" data-index="1">
+              <div class="relative flex items-center justify-center w-6 h-6 rounded border-2 border-outline-variant group-hover/item:border-primary-fixed transition-colors criteria-chk-box">
+                <span class="material-symbols-outlined text-[18px] text-primary-fixed opacity-0 check-icon">check</span>
+              </div>
+              <span class="text-on-surface text-sm group-hover/item:text-primary transition-colors crit-text" id="critText2">Social links (GitHub, LinkedIn, Twitter)</span>
+            </label>
+            
+            <!-- Task Item 3 -->
+            <label class="flex items-center gap-4 p-3 rounded-lg bg-surface-container hover:bg-surface-container-highest border border-outline-variant/30 cursor-pointer transition-colors group/item" id="crit3" data-index="2">
+              <div class="relative flex items-center justify-center w-6 h-6 rounded border-2 border-outline-variant group-hover/item:border-primary-fixed transition-colors criteria-chk-box">
+                <span class="material-symbols-outlined text-[18px] text-primary-fixed opacity-0 check-icon">check</span>
+              </div>
+              <span class="text-on-surface text-sm group-hover/item:text-primary transition-colors crit-text" id="critText3">Fully responsive layout (Mobile → Desktop)</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- PROOF OF WORK SECTION -->
+        <div class="mt-4 flex flex-col gap-4">
+          <h3 class="font-headline-md text-base font-bold text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined">upload_file</span>
+            Submit Proof of Work
+          </h3>
+          
+          <div class="grid grid-cols-1 gap-6">
+            
+            <!-- GitHub Card (Blue) -->
+            <div class="bg-surface rounded-xl border border-secondary/30 p-card-padding relative overflow-hidden group glow-bloom-blue transition-all duration-300 hover:border-secondary flex flex-col h-full">
+              <div class="absolute inset-0 bg-secondary/5 pointer-events-none"></div>
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                  <span class="material-symbols-outlined text-secondary">code</span>
+                </div>
+                <div>
+                  <h4 class="font-headline-md text-base font-bold text-secondary">Code Proof</h4>
+                  <p class="text-label-sm font-label-sm text-xs text-on-surface-variant">Repository Link</p>
+                </div>
+              </div>
+              <div class="mt-auto space-y-4">
+                <div class="relative border-glow-focus rounded-lg border border-outline-variant bg-surface-container/50 transition-all">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[20px]">link</span>
+                  <input class="w-full bg-transparent border-none text-on-surface placeholder:text-outline focus:ring-0 pl-10 py-3 rounded-lg font-body-md text-xs" placeholder="https://github.com/username/repo" type="url" id="codeUrl"/>
+                </div>
+                <button class="w-full py-3 px-4 bg-secondary text-on-surface font-bold text-sm rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(163,201,255,0.3)]" id="btnVerifyCode">
+                  Verify Code <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- LinkedIn Card (Pink/Purple) -->
+            <div class="bg-surface rounded-xl border border-tertiary-fixed-dim/30 p-card-padding relative overflow-hidden group glow-bloom-purple transition-all duration-300 hover:border-tertiary-fixed-dim flex flex-col h-full">
+              <div class="absolute inset-0 bg-tertiary-fixed-dim/5 pointer-events-none"></div>
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim/10 flex items-center justify-center border border-tertiary-fixed-dim/20">
+                  <span class="material-symbols-outlined text-tertiary-fixed-dim">share</span>
+                </div>
+                <div>
+                  <h4 class="font-headline-md text-base font-bold text-tertiary-fixed-dim">Public Proof</h4>
+                  <p class="text-label-sm font-label-sm text-xs text-on-surface-variant">Social Post Link</p>
+                </div>
+              </div>
+              <div class="mt-auto space-y-4">
+                <div class="relative border-glow-focus rounded-lg border border-outline-variant bg-surface-container/50 transition-all">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[20px]">link</span>
+                  <input class="w-full bg-transparent border-none text-on-surface placeholder:text-outline focus:ring-0 pl-10 py-3 rounded-lg font-body-md text-xs" placeholder="https://linkedin.com/posts/..." type="url" id="socialUrl"/>
+                </div>
+                <button class="w-full py-3 px-4 bg-tertiary-fixed-dim text-on-surface font-bold text-sm rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(206,189,255,0.3)]" id="btnVerifySocial">
+                  Verify Post <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+            
+          </div>
         </div>
       </div>
-    </div>
+    </main>
     
-    <!-- Submit Proof section -->
-    <div class="submit-section-title">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-      </svg>
-      <span>Submit Proof of Work</span>
-    </div>
-    
-    <!-- Code Proof -->
-    <div class="card" style="margin-bottom: 12px;">
-      <div class="card-title" style="margin-bottom: 10px;">
-        <span>Code Proof</span>
-        <span style="font-size: 10px; color: var(--text-muted); font-family: 'Fira Code', monospace;">REPOSITORY LINK</span>
-      </div>
-      <div class="input-wrapper">
-        <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-        </svg>
-        <input class="form-input" type="url" id="codeUrl" placeholder="https://github.com/username/repo">
-      </div>
-      <button class="btn btn-code" id="btnVerifyCode">
-        Verify Code
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </button>
-    </div>
-    
-    <!-- Public Proof -->
-    <div class="card">
-      <div class="card-title" style="margin-bottom: 10px;">
-        <span>Public Proof</span>
-        <span style="font-size: 10px; color: var(--text-muted); font-family: 'Fira Code', monospace;">SOCIAL POST LINK</span>
-      </div>
-      <div class="input-wrapper">
-        <svg class="input-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-        </svg>
-        <input class="form-input" type="url" id="socialUrl" placeholder="https://linkedin.com/posts/...">
-      </div>
-      <button class="btn btn-post" id="btnVerifySocial">
-        Verify Post
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </button>
-    </div>
-    
-    <!-- Navigation Bar -->
-    <div class="bottom-nav">
-      <div class="nav-item" onclick="window.location.href='../../dashboard/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-        <span>Home</span>
-      </div>
-      <div class="nav-item active" onclick="window.location.href='../../day/12/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-        <span>Challenge</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../../progress/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="20" x2="18" y2="10"></line>
-          <line x1="12" y1="20" x2="12" y2="4"></line>
-          <line x1="6" y1="20" x2="6" y2="14"></line>
-        </svg>
-        <span>Progress</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../../profile/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Profile</span>
-      </div>
-    </div>
-    
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../../dashboard/">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-sm text-xs mt-1">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-primary-fixed drop-shadow-[0_0_8px_rgba(150,218,35,0.5)] p-2 active:scale-95 transition-all duration-200" href="../../day/12/">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+        <span class="font-label-sm text-xs mt-1">Challenge</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../../progress/">
+        <span class="material-symbols-outlined">leaderboard</span>
+        <span class="font-label-sm text-xs mt-1">Progress</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../../profile/">
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-sm text-xs mt-1">Profile</span>
+      </a>
+    </nav>
   </div>
-  
+
   <!-- Success Modal -->
-  <div class="success-modal" id="successModal">
-    <div class="success-card">
-      <div class="success-flame-circle">
-        <svg viewBox="0 0 24 24" fill="url(#modalFlame)">
-          <defs>
-            <linearGradient id="modalFlame" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ffb233" />
-              <stop offset="100%" stop-color="#ff7a00" />
-            </linearGradient>
-          </defs>
-          <path d="M12 2c0 0-4 4.5-4 8.5C8 13.5 10 15 12 15s4-1.5 4-4.5C16 6.5 12 2 12 2z"></path>
-        </svg>
+  <div class="bottom-sheet-modal" id="successModal">
+    <div class="bottom-sheet text-center flex flex-col items-center">
+      <div class="w-16 h-16 rounded-full bg-primary-fixed/10 border border-primary-fixed/20 flex items-center justify-center mb-4 text-primary-fixed">
+        <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
       </div>
-      <h2 class="success-title">Build Completed!</h2>
-      <p class="success-desc" id="successDesc">Day 12 successfully submitted. Your learning streak has been extended to 12 days!</p>
-      <button class="btn btn-primary" onclick="window.location.href='../../dashboard/'">Back to Dashboard</button>
+      <h3 class="text-lg font-bold text-primary mb-2">Build Completed!</h3>
+      <p class="text-xs text-on-surface-variant mb-6" id="successDesc">Day 12 successfully submitted. Your learning streak has been extended!</p>
+      <button class="w-full bg-primary-fixed text-on-primary-fixed font-bold py-3 rounded-lg" onclick="window.location.href='../../dashboard/'">Back to Dashboard</button>
     </div>
   </div>
-  
+
   <script type="module">
     import { getState, saveState } from '../../shared/state.js';
     
-    // Greeting greeting text based on clock hour
     const hour = new Date().getHours();
     const greet = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-    document.getElementById("greetingTime").innerText = `${greet},`;
+    document.getElementById("greetingTime").innerText = greet;
     
     const state = getState();
-    
-    // Setup task specifics based on state (Day 1 vs Day 12)
     const isNew = state.completedCount === 0;
     
+    // Page Content setup based on student state
     if (isNew) {
       document.getElementById("dayIndicator").innerText = "DAY 1 OF 60";
       document.getElementById("dayTitle").innerText = "Setup Development Tools and Git Repository";
       document.getElementById("goalText").innerText = "Set up your local programming environment, install Node/Git, create a public GitHub repository, and push your first project file.";
-      document.getElementById("codeBlock").innerHTML = `<span class="code-tag">&lt;h1&gt;</span>Hello, World from Day 1 Challenge!<span class="code-tag">&lt;/h1&gt;</span>`;
+      document.getElementById("codeBlock").innerHTML = `<span class="text-primary">&lt;h1&gt;</span>Hello, World from Day 1 Challenge!<span class="text-primary">&lt;/h1&gt;</span>`;
       
       document.getElementById("critText1").innerText = "Install Git and initialize local repository";
       document.getElementById("critText2").innerText = "Create public repository on GitHub";
       document.getElementById("critText3").innerText = "Push commit with README file containing track goals";
     }
     
-    // Header setup
+    // Header credentials
     document.getElementById("headerName").innerText = state.profileName.split(" ")[0];
     const avatarImg = document.getElementById("headerAvatar");
     if (state.profileAvatar) {
@@ -500,126 +312,131 @@
       wrapper.innerText = state.profileName.charAt(0);
     }
     
-    // Init Acceptance Criteria elements
-    const critItems = document.querySelectorAll(".criteria-item");
-    critItems.forEach(item => {
-      const idx = parseInt(item.getAttribute("data-index"));
-      if (state.day12Checked[idx]) {
-        item.classList.add("checked");
-      }
-      
-      item.addEventListener("click", () => {
-        item.classList.toggle("checked");
-        state.day12Checked[idx] = item.classList.contains("checked");
+    // Acceptance Checklist handler
+    const critLabels = [
+      document.getElementById("crit1"),
+      document.getElementById("crit2"),
+      document.getElementById("crit3")
+    ];
+    
+    const updateChecklistUI = () => {
+      critLabels.forEach((label, idx) => {
+        const chkBox = label.querySelector(".criteria-chk-box");
+        const icon = label.querySelector(".check-icon");
+        const text = label.querySelector(".crit-text");
+        
+        if (state.day12Checked[idx]) {
+          chkBox.style.backgroundColor = "var(--accent-green)";
+          chkBox.style.borderColor = "var(--accent-green)";
+          icon.style.opacity = "1";
+          icon.style.color = "#000000";
+          text.style.textDecoration = "line-through";
+          text.style.opacity = "0.5";
+        } else {
+          chkBox.style.backgroundColor = "transparent";
+          chkBox.style.borderColor = "var(--text-muted)";
+          icon.style.opacity = "0";
+          text.style.textDecoration = "none";
+          text.style.opacity = "1";
+        }
+      });
+    };
+    
+    critLabels.forEach((label, idx) => {
+      label.addEventListener("click", (e) => {
+        e.preventDefault();
+        state.day12Checked[idx] = !state.day12Checked[idx];
         saveState(state);
+        updateChecklistUI();
       });
     });
     
-    // Code input & verify button state init
+    updateChecklistUI();
+    
+    // Code verify button & inputs
     const codeUrlInput = document.getElementById("codeUrl");
     const btnVerifyCode = document.getElementById("btnVerifyCode");
     
+    const setBtnVerified = (btn, text) => {
+      btn.disabled = true;
+      btn.style.backgroundColor = "rgba(184, 255, 74, 0.1)";
+      btn.style.borderColor = "var(--accent-green)";
+      btn.style.color = "var(--accent-green)";
+      btn.innerHTML = `${text} <span class="material-symbols-outlined text-[18px]">check</span>`;
+    };
+    
     if (state.day12CodeVerified) {
-      setVerifiedState(btnVerifyCode, "Code Verified ✓");
+      setBtnVerified(btnVerifyCode, "Code Verified");
       codeUrlInput.value = state.day12SubmittedCode || "https://github.com/username/repo";
       codeUrlInput.disabled = true;
     }
     
-    // Social input & verify button state init
+    btnVerifyCode.addEventListener("click", () => {
+      if (state.day12CodeVerified) return;
+      const val = codeUrlInput.value.trim();
+      if (!val) {
+        alert("Please enter a valid repository URL");
+        return;
+      }
+      
+      btnVerifyCode.disabled = true;
+      btnVerifyCode.innerHTML = `<span class="spinner"></span>`;
+      
+      setTimeout(() => {
+        setBtnVerified(btnVerifyCode, "Code Verified");
+        state.day12CodeVerified = true;
+        state.day12SubmittedCode = val;
+        saveState(state);
+        checkChallengeCompletion();
+      }, 1000);
+    });
+    
+    // Social verify button & inputs
     const socialUrlInput = document.getElementById("socialUrl");
     const btnVerifySocial = document.getElementById("btnVerifySocial");
     
     if (state.day12SocialVerified) {
-      setVerifiedState(btnVerifySocial, "Post Verified ✓");
+      setBtnVerified(btnVerifySocial, "Post Verified");
       socialUrlInput.value = state.day12SubmittedSocial || "https://linkedin.com/posts/...";
       socialUrlInput.disabled = true;
     }
     
-    // Code Verification Handler
-    btnVerifyCode.addEventListener("click", () => {
-      if (state.day12CodeVerified) return;
-      
-      const val = codeUrlInput.value.trim();
-      if (!val) {
-        alert("Please enter a valid GitHub repository URL.");
-        return;
-      }
-      
-      setLoadingState(btnVerifyCode, true);
-      
-      setTimeout(() => {
-        setLoadingState(btnVerifyCode, false);
-        setVerifiedState(btnVerifyCode, "Code Verified ✓");
-        state.day12CodeVerified = true;
-        state.day12SubmittedCode = val;
-        saveState(state);
-        checkFullCompletion();
-      }, 1000);
-    });
-    
-    // Social Verification Handler
     btnVerifySocial.addEventListener("click", () => {
       if (state.day12SocialVerified) return;
-      
       const val = socialUrlInput.value.trim();
       if (!val) {
-        alert("Please enter a valid LinkedIn post URL.");
+        alert("Please enter a valid social post URL");
         return;
       }
       
-      setLoadingState(btnVerifySocial, true);
+      btnVerifySocial.disabled = true;
+      btnVerifySocial.innerHTML = `<span class="spinner"></span>`;
       
       setTimeout(() => {
-        setLoadingState(btnVerifySocial, false);
-        setVerifiedState(btnVerifySocial, "Post Verified ✓");
+        setBtnVerified(btnVerifySocial, "Post Verified");
         state.day12SocialVerified = true;
         state.day12SubmittedSocial = val;
         saveState(state);
-        checkFullCompletion();
+        checkChallengeCompletion();
       }, 1000);
     });
     
-    function setLoadingState(btn, loading) {
-      if (loading) {
-        btn.disabled = true;
-        btn.innerHTML = `<span class="spinner"></span>`;
-      } else {
-        btn.disabled = false;
-      }
-    }
-    
-    function setVerifiedState(btn, text) {
-      btn.disabled = true;
-      btn.className = "btn";
-      btn.style.backgroundColor = "rgba(163, 255, 51, 0.15)";
-      btn.style.color = "var(--accent-green)";
-      btn.style.border = "1px solid rgba(163, 255, 51, 0.3)";
-      btn.innerText = text;
-    }
-    
-    function checkFullCompletion() {
+    const checkChallengeCompletion = () => {
       if (state.day12CodeVerified && state.day12SocialVerified) {
-        // Complete! Update state values
         if (isNew) {
           state.streak = 1;
           state.completedCount = 1;
           state.completedDays.push(1);
-          state.momentum[0] = 1; // Mark first day momentum active
+          state.momentum[0] = 1;
           state.skills.layout = 10;
           state.achievements.find(a => a.id === "first-build").unlocked = true;
           document.getElementById("successDesc").innerText = "Day 1 successfully submitted. Your learning streak has been extended to 1 day!";
         } else {
-          // Increment streak
-          if (state.streak === 0) {
-            state.streak = 1; // Reset streak started
-          } else {
-            state.streak += 1;
-          }
+          state.streak = state.streak === 0 ? 1 : state.streak + 1;
           state.completedCount += 1;
           if (!state.completedDays.includes(12)) {
             state.completedDays.push(12);
           }
-          // Mark today completed in momentum (index 7 is today)
           state.momentum[7] = 1;
           state.skills.layout = 95;
           state.skills.state = 65;
@@ -629,21 +446,39 @@
         
         saveState(state);
         
-        // Confetti!
+        // Trigger confetti
         startConfetti();
         
-        // Show success modal
         setTimeout(() => {
           document.getElementById("successModal").classList.add("show");
         }, 300);
       }
-    }
+    };
+    
+    // Loading spinner helper styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .spinner {
+        border: 2px solid rgba(255,255,255,0.1);
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border-left-color: currentColor;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
     
     /* Confetti Particle Logic */
     const canvas = document.getElementById("confettiCanvas");
     const ctx = canvas.getContext("2d");
     let confetti = [];
-    const colors = ["#a3ff33", "#ff7a00", "#b89eff", "#8cb6ff", "#ff75b5"];
+    const colors = ["#b1f743", "#ff8c00", "#cebdff", "#a3c9ff", "#ff69b4"];
     let animId;
     
     function resizeCanvas() {
@@ -672,16 +507,13 @@
     
     function updateConfetti() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
       let alive = false;
       confetti.forEach((p, index) => {
         p.tiltAngle += p.tiltAngleIncremental;
         p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
         p.x += Math.sin(p.tiltAngle);
         p.tilt = Math.sin(p.tiltAngle - index / 3) * 15;
-        
         if (p.y < canvas.height) alive = true;
-        
         ctx.beginPath();
         ctx.lineWidth = p.r;
         ctx.strokeStyle = p.color;
@@ -689,7 +521,6 @@
         ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
         ctx.stroke();
       });
-      
       if (alive) {
         animId = requestAnimationFrame(updateConfetti);
       } else {

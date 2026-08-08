@@ -1,336 +1,292 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABTalks - 60 Days Coding Challenge</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>ABTalks - 60 Days Journey</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Hanken+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./shared/global.css">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "var(--bg-main)",
+            "surface": "var(--bg-card)",
+            "surface-dim": "var(--bg-surface-dim)",
+            "surface-container": "var(--bg-surface-container)",
+            "surface-container-highest": "var(--bg-surface-container-highest)",
+            "on-surface": "var(--text-primary)",
+            "on-surface-variant": "var(--text-secondary)",
+            "primary-fixed": "var(--accent-green)",
+            "primary-fixed-dim": "var(--accent-green-dim)",
+            "secondary": "var(--accent-blue)",
+            "tertiary-fixed-dim": "var(--accent-purple)",
+            "outline-variant": "var(--border-color)",
+            "primary": "var(--text-primary)",
+            "on-primary-fixed": "#111f00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "8px",
+            "gutter": "16px",
+            "section-gap": "40px",
+            "container-margin": "24px",
+            "card-padding": "20px"
+          },
+          "fontFamily": {
+            "body-md": ["Geist"],
+            "headline-lg": ["Hanken Grotesk"],
+            "display-xl": ["Hanken Grotesk"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-xl": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <script>
+    // Theme sync script (executed immediately to prevent style flashes)
+    if (localStorage.getItem("abt_theme") === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light-theme");
+    }
+  </script>
+  
   <style>
-    .landing-hero {
-      text-align: center;
-      padding: 40px 20px 20px 20px;
-    }
-    
-    .initiative-tag {
-      font-size: 11px;
-      font-family: 'Outfit', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
-      display: block;
-    }
-    
-    .hero-title {
-      font-size: 46px;
-      line-height: 1.15;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-    
-    .highlight-orange {
-      color: var(--accent-orange);
-      background: linear-gradient(135deg, #ff9e43, #ff7a00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .highlight-blue {
-      color: var(--accent-blue);
-      background: linear-gradient(135deg, #8cb6ff, #548eff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .highlight-pink {
-      color: var(--accent-pink);
-      background: linear-gradient(135deg, #ff75b5, #ff3b93);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    
-    .hero-subtitle {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 30px;
-      font-weight: 400;
-    }
-    
-    .cta-container {
-      padding: 0 30px;
-      margin-bottom: 50px;
-    }
-    
-    /* Timeline Section */
-    .path-section {
-      background-color: var(--bg-card);
-      border-radius: 24px;
-      border: 1px solid var(--border-color);
-      padding: 24px;
-      margin: 0 20px 30px 20px;
-    }
-    
-    .path-title {
-      font-size: 16px;
-      margin-bottom: 24px;
+    body {
+      background-color: var(--bg-main);
       color: var(--text-primary);
     }
     
-    .timeline {
-      position: relative;
-      padding-left: 36px;
+    .accent-glow-primary {
+      box-shadow: 0 0 12px 0 rgba(177, 247, 67, 0.15);
+    }
+    .accent-glow-orange {
+      box-shadow: 0 0 12px 0 rgba(255, 165, 0, 0.15);
     }
     
-    /* The line connecting nodes */
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 11px;
-      top: 10px;
-      bottom: 10px;
+    .text-gradient-orange-purple {
+      background: linear-gradient(90deg, #FF8C00, #9370DB);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .text-gradient-blue-pink {
+      background: linear-gradient(90deg, #1E90FF, #FF69B4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .path-line {
       width: 2px;
-      background: linear-gradient(to bottom, var(--accent-green) 0%, var(--accent-blue) 30%, var(--accent-orange) 60%, var(--text-muted) 100%);
-    }
-    
-    .timeline-item {
-      position: relative;
-      margin-bottom: 30px;
-    }
-    
-    .timeline-item:last-child {
-      margin-bottom: 0;
-    }
-    
-    .timeline-marker {
+      background: linear-gradient(to bottom, #b1f743, #a3c9ff, #cebdff, #ff8c00, #ff69b4, #ffffff);
       position: absolute;
-      left: -36px;
-      top: 2px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--bg-card);
-      border: 2px solid var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all var(--transition-normal);
-    }
-    
-    .timeline-marker::after {
-      content: '';
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      transition: all var(--transition-normal);
-    }
-    
-    /* Markers colors matching mockup */
-    .item-day1 .timeline-marker {
-      border-color: var(--accent-green);
-      box-shadow: 0 0 10px rgba(163, 255, 51, 0.4);
-    }
-    .item-day1 .timeline-marker::after {
-      background: var(--accent-green);
-    }
-    
-    .item-day10 .timeline-marker {
-      border-color: var(--accent-blue);
-      box-shadow: 0 0 10px rgba(140, 182, 255, 0.4);
-    }
-    .item-day10 .timeline-marker::after {
-      background: var(--accent-blue);
-    }
-    
-    .item-day30 .timeline-marker {
-      border-color: var(--accent-orange);
-      box-shadow: 0 0 10px rgba(255, 122, 0, 0.4);
-    }
-    .item-day30 .timeline-marker::after {
-      background: var(--accent-orange);
-    }
-    
-    .item-day60 .timeline-marker {
-      border-color: var(--text-primary);
-    }
-    .item-day60 .timeline-marker::after {
-      background: transparent;
-      width: 12px;
-      height: 12px;
-      border: 2px solid var(--text-primary);
-    }
-    
-    .timeline-day {
-      font-size: 11px;
-      font-family: 'Fira Code', monospace;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 4px;
-    }
-    
-    .item-day1 .timeline-day { color: var(--accent-green); }
-    .item-day10 .timeline-day { color: var(--accent-blue); }
-    .item-day30 .timeline-day { color: var(--accent-orange); }
-    .item-day60 .timeline-day { color: var(--text-secondary); }
-    
-    .timeline-header {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-    }
-    
-    .timeline-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-    
-    .nav-gap {
-      height: 20px;
+      left: 20px;
+      top: 24px;
+      bottom: 24px;
+      z-index: 0;
     }
   </style>
 </head>
-<body>
-  <div class="app-container">
-    
-    <!-- Updated Header: Matches the layout exactly, shows student avatar & greetings -->
-    <div class="header">
-      <div class="user-profile-header">
-        <div class="avatar-wrapper">
-          <img class="avatar-img" id="headerAvatar" src="" alt="Avatar">
-        </div>
-        <div>
-          <div class="greeting-text" id="greetingTime">Good evening,</div>
-          <div class="greeting-name" id="headerName">Dev</div>
-        </div>
-      </div>
-      <button class="notification-btn" onclick="window.location.href='./dashboard/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-      </button>
-    </div>
-    
-    <div class="landing-hero">
-      <span class="initiative-tag">An Initiative by ABTalks</span>
-      <h1 class="hero-title">
-        <span class="highlight-orange">60 days.</span><br>
-        60 builds.<br>
-        One <span class="highlight-blue">visible</span> <span class="highlight-pink">proof</span> of work.
-      </h1>
-      <p class="hero-subtitle">
-        Build your portfolio through action.
-      </p>
-    </div>
-    
-    <div class="cta-container">
-      <button class="btn btn-primary" onclick="window.location.href='./dashboard/'">
-        Start your journey
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </button>
-    </div>
-    
-    <div class="path-section">
-      <h3 class="path-title">The Path</h3>
-      
-      <div class="timeline">
-        <div class="timeline-item item-day1">
-          <div class="timeline-marker"></div>
-          <div class="timeline-day">Day 01</div>
-          <div class="timeline-header">The First Commit</div>
-          <div class="timeline-desc">Set up your environment and ship a basic component.</div>
-        </div>
-        
-        <div class="timeline-item item-day10">
-          <div class="timeline-marker"></div>
-          <div class="timeline-day">Day 10</div>
-          <div class="timeline-header">State Management</div>
-          <div class="timeline-desc">Implement robust data flow in your app.</div>
-        </div>
-        
-        <div class="timeline-item item-day30">
-          <div class="timeline-marker"></div>
-          <div class="timeline-day">Day 30</div>
-          <div class="timeline-header">Halfway Mark</div>
-          <div class="timeline-desc">Deploy a full-stack mini-project.</div>
-        </div>
-        
-        <div class="timeline-item item-day60">
-          <div class="timeline-marker"></div>
-          <div class="timeline-day">Day 60</div>
-          <div class="timeline-header">Visible Proof</div>
-          <div class="timeline-desc">Showcase your portfolio of 60 working builds.</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="nav-gap"></div>
-    
-    <!-- Navigation Bar -->
-    <div class="bottom-nav">
-      <div class="nav-item active" onclick="window.location.href='./'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-        <span>Home</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='./day/12/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-        <span>Challenge</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='./progress/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="20" x2="18" y2="10"></line>
-          <line x1="12" y1="20" x2="12" y2="4"></line>
-          <line x1="6" y1="20" x2="6" y2="14"></line>
-        </svg>
-        <span>Progress</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='./profile/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Profile</span>
-      </div>
-    </div>
-    
-  </div>
+<body class="font-body-md text-body-md antialiased pb-24 selection:bg-primary-container selection:text-on-primary-container">
   
+  <!-- App Wrapper to match mobile dimensions centered on desktop -->
+  <div class="max-w-[412px] mx-auto min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col">
+    
+    <!-- TopAppBar (Dynamic Header) -->
+    <header class="w-full bg-surface flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
+      <div class="flex items-center gap-3">
+        <!-- Auth View Greeting -->
+        <div class="flex items-center gap-3" id="headerAuthArea" style="display: none;">
+          <div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container border border-outline-variant">
+            <img id="headerAvatar" alt="User avatar" class="w-full h-full object-cover" src="">
+          </div>
+          <h1 class="font-headline-md text-sm font-bold text-on-surface">Good evening, <span id="headerName">Dev</span> 👋</h1>
+        </div>
+        
+        <!-- Public Brand View Logo -->
+        <div class="flex items-center" id="headerPublicArea">
+          <h1 class="font-headline-md text-lg font-extrabold tracking-tight text-primary">AB<span class="text-primary-fixed">TALKS</span></h1>
+        </div>
+      </div>
+      
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors" id="btnNotification" onclick="handleNavClick('./dashboard/')">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+      </button>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="flex-grow w-full px-gutter pt-8 flex flex-col gap-6">
+      
+      <!-- Hero Section -->
+      <section class="flex flex-col gap-4 py-8 items-center text-center">
+        <span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-2">An initiative by ABTalks</span>
+        <h2 class="font-display-xl text-4xl font-extrabold text-primary leading-tight">
+          <span class="text-gradient-orange-purple">60 days.</span><br>
+          <span class="">60 builds.</span><br>
+          One <span class="text-gradient-blue-pink">visible proof</span> of work.
+        </h2>
+        <p class="font-body-md text-sm text-on-surface-variant mt-2 max-w-xs">
+          Build your portfolio through action.
+        </p>
+        <button class="mt-6 bg-primary-fixed text-on-primary-fixed font-bold py-3 px-6 rounded-xl hover:opacity-90 active:scale-95 transition-all accent-glow-primary flex items-center gap-2" id="btnStartJourney">
+          Start your journey
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+        </button>
+      </section>
+      
+      <!-- Journey Path -->
+      <section class="relative bg-surface rounded-xl border border-outline-variant/30 p-card-padding overflow-hidden mt-2">
+        <div class="absolute inset-0 bg-primary-fixed opacity-[0.02] pointer-events-none"></div>
+        <h3 class="font-headline-md text-lg font-bold text-primary mb-8 relative z-10">The Path</h3>
+        
+        <div class="relative pl-12 flex flex-col gap-10">
+          <div class="path-line"></div>
+          
+          <!-- Day 01 -->
+          <div class="relative z-10 flex flex-col gap-1">
+            <div class="absolute -left-12 top-1 w-6 h-6 rounded-full bg-background border-2 border-primary-fixed flex items-center justify-center accent-glow-primary">
+              <div class="w-2 h-2 rounded-full bg-primary-fixed"></div>
+            </div>
+            <span class="font-label-sm text-xs font-bold text-primary-fixed">Day 01</span>
+            <h4 class="font-headline-md text-base leading-6 font-semibold text-primary">The First Commit</h4>
+            <p class="text-on-surface-variant text-xs mt-1">Set up your environment and ship a basic component.</p>
+          </div>
+          
+          <!-- Day 10 -->
+          <div class="relative z-10 flex flex-col gap-1">
+            <div class="absolute -left-12 top-1 w-6 h-6 rounded-full bg-background border-2 border-secondary flex items-center justify-center" style="box-shadow: 0 0 12px 0 rgba(163, 201, 255, 0.15);">
+              <div class="w-2 h-2 rounded-full bg-secondary"></div>
+            </div>
+            <span class="font-label-sm text-xs font-bold text-secondary">Day 10</span>
+            <h4 class="font-headline-md text-base leading-6 font-semibold text-primary">State Management</h4>
+            <p class="text-on-surface-variant text-xs mt-1">Implement robust data flow in your app.</p>
+          </div>
+          
+          <!-- Day 30 -->
+          <div class="relative z-10 flex flex-col gap-1">
+            <div class="absolute -left-12 top-1 w-6 h-6 rounded-full bg-background border-2 border-[#FF8C00] flex items-center justify-center accent-glow-orange">
+              <div class="w-2 h-2 rounded-full bg-[#FF8C00]"></div>
+            </div>
+            <span class="font-label-sm text-xs font-bold text-[#FF8C00]">Day 30</span>
+            <h4 class="font-headline-md text-base leading-6 font-semibold text-primary">Halfway Mark</h4>
+            <p class="text-on-surface-variant text-xs mt-1">Deploy a full-stack mini-project.</p>
+          </div>
+          
+          <!-- Day 60 -->
+          <div class="relative z-10 flex flex-col gap-1">
+            <div class="absolute -left-12 top-1 w-6 h-6 rounded-full bg-background border-2 border-primary flex items-center justify-center" style="box-shadow: 0 0 16px 0 rgba(255, 255, 255, 0.3);">
+              <span class="material-symbols-outlined text-[12px] text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            </div>
+            <span class="font-label-sm text-xs font-bold text-primary">Day 60</span>
+            <h4 class="font-headline-md text-base leading-6 font-semibold text-primary">Visible Proof</h4>
+            <p class="text-on-surface-variant text-xs mt-1">Showcase your portfolio of 60 working builds.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <!-- BottomNavBar (Mobile Layout Wrapper) -->
+    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+      <!-- Home (Active) -->
+      <a class="flex flex-col items-center justify-center text-primary-fixed-dim drop-shadow-[0_0_8px_rgba(150,218,35,0.5)] p-2 active:scale-95 transition-all duration-200" href="#" onclick="handleNavClick('./')">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+        <span class="font-label-sm text-xs mt-1">Home</span>
+      </a>
+      
+      <!-- Challenge -->
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-lg p-2 active:scale-95" href="#" onclick="handleNavClick('./day/12/')">
+        <span class="material-symbols-outlined">fitness_center</span>
+        <span class="font-label-sm text-xs mt-1">Challenge</span>
+      </a>
+      
+      <!-- Progress -->
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-lg p-2 active:scale-95" href="#" onclick="handleNavClick('./progress/')">
+        <span class="material-symbols-outlined">leaderboard</span>
+        <span class="font-label-sm text-xs mt-1">Progress</span>
+      </a>
+      
+      <!-- Profile -->
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest transition-colors rounded-lg p-2 active:scale-95" href="#" onclick="handleNavClick('./profile/')">
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-sm text-xs mt-1">Profile</span>
+      </a>
+    </nav>
+  </div>
+
   <script type="module">
-    import { getState } from './shared/state.js';
+    import { getState, isLoggedIn, login } from './shared/state.js';
     
-    const hour = new Date().getHours();
-    const greet = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-    document.getElementById("greetingTime").innerText = `${greet},`;
+    const authed = isLoggedIn();
+    const headerAuthArea = document.getElementById("headerAuthArea");
+    const headerPublicArea = document.getElementById("headerPublicArea");
+    const startBtn = document.getElementById("btnStartJourney");
+    const notificationBtn = document.getElementById("btnNotification");
     
-    const state = getState();
-    document.getElementById("headerName").innerText = state.profileName.split(" ")[0];
-    
-    const avatarImg = document.getElementById("headerAvatar");
-    if (state.profileAvatar) {
-      avatarImg.src = state.profileAvatar;
+    if (authed) {
+      headerAuthArea.style.display = "flex";
+      headerPublicArea.style.display = "none";
+      notificationBtn.style.display = "flex";
+      
+      const state = getState();
+      document.getElementById("headerName").innerText = state.profileName.split(" ")[0];
+      
+      const avatarImg = document.getElementById("headerAvatar");
+      if (state.profileAvatar) {
+        avatarImg.src = state.profileAvatar;
+      } else {
+        avatarImg.style.display = "none";
+        const wrapper = avatarImg.parentElement;
+        wrapper.style.display = "flex";
+        wrapper.style.alignItems = "center";
+        wrapper.style.justifyContent = "center";
+        wrapper.style.color = "var(--accent-green)";
+        wrapper.style.fontWeight = "bold";
+        wrapper.innerText = state.profileName.charAt(0);
+      }
     } else {
-      avatarImg.style.display = "none";
-      const wrapper = avatarImg.parentElement;
-      wrapper.style.display = "flex";
-      wrapper.style.alignItems = "center";
-      wrapper.style.justifyContent = "center";
-      wrapper.style.color = "var(--accent-green)";
-      wrapper.style.fontWeight = "bold";
-      wrapper.innerText = state.profileName.charAt(0);
+      headerAuthArea.style.display = "none";
+      headerPublicArea.style.display = "flex";
+      notificationBtn.style.display = "none";
     }
+    
+    // Start Journey CTA handler
+    startBtn.addEventListener("click", () => {
+      if (!isLoggedIn()) {
+        login();
+      }
+      window.location.href = './dashboard/';
+    });
+    
+    // Nav Click handlers that log in automatically if clicked while logged out
+    window.handleNavClick = function(targetUrl) {
+      if (!isLoggedIn()) {
+        login();
+      }
+      window.location.href = targetUrl;
+    };
   </script>
 </body>
 </html>

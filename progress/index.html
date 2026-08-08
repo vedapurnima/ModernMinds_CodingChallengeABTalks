@@ -1,269 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Progress - ABTalks</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Hanken+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../shared/global.css">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "var(--bg-main)",
+            "surface": "var(--bg-card)",
+            "surface-dim": "var(--bg-surface-dim)",
+            "surface-container": "var(--bg-surface-container)",
+            "surface-container-highest": "var(--bg-surface-container-highest)",
+            "on-surface": "var(--text-primary)",
+            "on-surface-variant": "var(--text-secondary)",
+            "primary-fixed": "var(--accent-green)",
+            "primary-fixed-dim": "var(--accent-green-dim)",
+            "secondary": "var(--accent-blue)",
+            "tertiary-fixed-dim": "var(--accent-purple)",
+            "outline-variant": "var(--border-color)",
+            "primary": "var(--text-primary)",
+            "on-primary-fixed": "#111f00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "8px",
+            "gutter": "16px",
+            "section-gap": "40px",
+            "container-margin": "24px",
+            "card-padding": "20px"
+          },
+          "fontFamily": {
+            "body-md": ["Geist"],
+            "headline-lg": ["Hanken Grotesk"],
+            "display-xl": ["Hanken Grotesk"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-xl": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <script>
+    if (localStorage.getItem("abt_theme") === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light-theme");
+    }
+  </script>
+  
   <style>
-    .progress-header {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
+    body { background-color: var(--bg-main); color: var(--text-primary); }
+    .card-border { border: 1px solid var(--border-color); }
     
-    .overview-circle-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px 0 20px 0;
-    }
-    
+    /* Conic circular progress styling */
     .circular-progress {
       position: relative;
-      width: 140px;
-      height: 140px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
-      background: radial-gradient(closest-side, var(--bg-card) 79%, transparent 80% 100%),
-                  conic-gradient(var(--accent-green) 0%, var(--bg-input) 0%);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 25px;
-      transition: background var(--transition-normal);
-      border: 1px solid var(--border-color);
-      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+      transition: background 250ms ease;
     }
     
-    .circular-progress::after {
-      content: '';
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background-color: var(--accent-green);
-      border-radius: 50%;
-      top: 6px;
-      box-shadow: 0 0 10px var(--accent-green);
-    }
-    
-    .progress-value {
-      text-align: center;
-      font-family: 'Outfit', sans-serif;
-    }
-    
-    .progress-value-big {
-      font-size: 38px;
-      font-weight: 800;
-      color: var(--accent-green);
-      line-height: 1;
-    }
-    
-    .progress-value-small {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 6px;
-      font-weight: 500;
-    }
-    
-    /* Skills Meters */
-    .skills-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .skill-row {
-      width: 100%;
-    }
-    
-    .skill-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 10px;
-      font-family: 'Fira Code', monospace;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-      letter-spacing: 0.05em;
-    }
-    
-    .skill-pct {
-      color: var(--accent-purple);
-    }
-    
-    .skill-track {
-      height: 6px;
-      background-color: var(--bg-input);
-      border-radius: 3px;
-      width: 100%;
-      overflow: hidden;
-    }
-    
-    .skill-fill {
-      height: 100%;
-      background: linear-gradient(to right, #9e8eff, var(--accent-purple));
-      border-radius: 3px;
-      width: 0%;
-      transition: width 1s ease-out;
-    }
-    
-    /* Recent Builds List */
-    .builds-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    
-    .build-item {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 16px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    
-    .build-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 15px;
-      bottom: 15px;
-      width: 3px;
-      border-radius: 0 3px 3px 0;
-      background-color: var(--accent-green);
-    }
-    
-    .build-day {
-      font-size: 10px;
-      font-family: 'Fira Code', monospace;
-      font-weight: 600;
-      color: var(--accent-green);
-    }
-    
-    .build-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-    
-    .build-badges {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 9px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .badge-code {
-      background-color: rgba(140, 182, 255, 0.1);
-      border: 1px solid rgba(140, 182, 255, 0.2);
-      color: var(--accent-blue);
-    }
-    
-    .badge-social {
-      background-color: rgba(255, 117, 181, 0.1);
-      border: 1px solid rgba(255, 117, 181, 0.2);
-      color: var(--accent-pink);
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 30px 20px;
-      color: var(--text-secondary);
-      font-size: 13px;
-    }
-    
-    /* Small journey timeline in circular tracker card */
-    .mini-journey {
-      width: 100%;
-      height: 3px;
-      background-color: var(--bg-input);
-      position: relative;
-      border-radius: 1.5px;
-    }
-    .mini-journey-fill {
-      height: 100%;
-      background-color: var(--accent-green);
-      width: 0%;
-      border-radius: 1.5px;
-      transition: width var(--transition-normal);
-    }
-    .mini-journey-nodes {
-      display: flex;
-      justify-content: space-between;
-      margin-top: -6px;
-    }
-    .mini-node {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background-color: var(--bg-input);
-      border: 2px solid #2d3345;
-    }
-    .mini-node.active {
-      background-color: var(--accent-green);
-      border-color: var(--accent-green);
-      box-shadow: 0 0 5px var(--accent-green);
-    }
-    .mini-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 8px;
-      color: var(--text-muted);
-      margin-top: 8px;
-      font-weight: 600;
-    }
+    .pb-nav { padding-bottom: 80px; }
   </style>
 </head>
-<body>
-  <div class="app-container">
+<body class="font-body-md text-body-md min-h-screen flex flex-col pb-nav">
+  
+  <div class="max-w-[412px] mx-auto w-full min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col pb-24">
     
-    <div class="header">
-      <h1 class="progress-header">Progress</h1>
-      <button class="notification-btn" style="border-radius: 12px; width: 34px; height: 34px;">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;">
-          <circle cx="12" cy="12" r="1"></circle>
-          <circle cx="12" cy="5" r="1"></circle>
-          <circle cx="12" cy="19" r="1"></circle>
-        </svg>
+    <!-- TopAppBar -->
+    <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
+      <h1 class="font-bold tracking-tight">Progress</h1>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
       </button>
-    </div>
+    </header>
     
-    <!-- Journey Overview (Circular Ring) -->
-    <div class="card">
-      <div class="card-title">Journey Overview</div>
-      <div class="overview-circle-container">
-        <div class="circular-progress" id="circRing">
-          <div class="progress-value">
-            <div class="progress-value-big" id="completedVal">0</div>
-            <div class="progress-value-small">/ 60 BUILDS</div>
+    <main class="flex-grow w-full px-4 py-6 flex flex-col gap-6">
+      
+      <!-- Journey Overview Circular card -->
+      <div class="bg-surface rounded-xl p-card-padding card-border flex flex-col items-center">
+        <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase mb-4 self-start">Journey Overview</h3>
+        <div class="circular-progress mb-6 border border-outline-variant/30" id="circRing">
+          <div class="text-center">
+            <span class="font-display-xl text-3xl font-extrabold text-primary-fixed" id="completedVal">0</span>
+            <span class="block text-2xs font-bold text-on-surface-variant mt-1">/ 60 BUILDS</span>
           </div>
         </div>
         
-        <div class="mini-journey">
-          <div class="mini-journey-fill" id="miniFill"></div>
-          <div class="mini-journey-nodes">
-            <div class="mini-node" id="n1"></div>
-            <div class="mini-node" id="n12"></div>
-            <div class="mini-node" id="n30"></div>
-            <div class="mini-node" id="n45"></div>
-            <div class="mini-node" id="n60"></div>
-          </div>
+        <!-- mini journey progress line inside circle overview -->
+        <div class="relative w-full h-[3px] bg-surface-container rounded-full mb-4">
+          <div class="absolute top-0 left-0 h-full bg-primary-fixed rounded-full" id="miniFill" style="width: 0%;"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[0%] w-2 h-2 rounded-full bg-surface-container border border-outline-variant" id="n1"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[20%] w-2 h-2 rounded-full bg-surface-container border border-outline-variant" id="n12"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[50%] w-2 h-2 rounded-full bg-surface-container border border-outline-variant" id="n30"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[75%] w-2 h-2 rounded-full bg-surface-container border border-outline-variant" id="n45"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[100%] -translate-x-full w-2 h-2 rounded-full bg-surface-container border border-outline-variant" id="n60"></div>
         </div>
-        <div class="mini-labels" style="width: 100%;">
+        <div class="flex justify-between w-full text-3xs font-bold text-on-surface-variant font-label-sm">
           <span>Day 1</span>
           <span>Day 12</span>
           <span>Day 30</span>
@@ -271,110 +131,97 @@
           <span>Day 60</span>
         </div>
       </div>
-    </div>
-    
-    <!-- Skills Acquired -->
-    <div class="card">
-      <div class="card-title">Skills Acquired</div>
-      <div class="skills-container">
-        <div class="skill-row">
-          <div class="skill-header">
-            <span>LAYOUT (FLEX/GRID)</span>
-            <span class="skill-pct" id="layoutPct">0%</span>
-          </div>
-          <div class="skill-track">
-            <div class="skill-fill" id="layoutFill"></div>
-          </div>
-        </div>
+      
+      <!-- Skills Acquired -->
+      <div class="bg-surface rounded-xl p-card-padding card-border flex flex-col">
+        <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase mb-4">Skills Acquired</h3>
         
-        <div class="skill-row">
-          <div class="skill-header">
-            <span>STATE MANAGEMENT</span>
-            <span class="skill-pct" id="statePct">0%</span>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between text-2xs font-bold text-on-surface-variant mb-2">
+              <span>LAYOUT (FLEX/GRID)</span>
+              <span class="text-tertiary-fixed-dim" id="layoutPct">0%</span>
+            </div>
+            <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+              <div class="h-full bg-tertiary-fixed-dim rounded-full" id="layoutFill" style="width: 0%;"></div>
+            </div>
           </div>
-          <div class="skill-track">
-            <div class="skill-fill" id="stateFill"></div>
+          
+          <div>
+            <div class="flex justify-between text-2xs font-bold text-on-surface-variant mb-2">
+              <span>STATE MANAGEMENT</span>
+              <span class="text-tertiary-fixed-dim" id="statePct">0%</span>
+            </div>
+            <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+              <div class="h-full bg-tertiary-fixed-dim rounded-full" id="stateFill" style="width: 0%;"></div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between text-2xs font-bold text-on-surface-variant mb-2">
+              <span>API INTEGRATION</span>
+              <span class="text-tertiary-fixed-dim" id="apiPct">0%</span>
+            </div>
+            <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+              <div class="h-full bg-tertiary-fixed-dim rounded-full" id="apiFill" style="width: 0%;"></div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between text-2xs font-bold text-on-surface-variant mb-2">
+              <span>AUTHENTICATION</span>
+              <span class="text-tertiary-fixed-dim" id="authPct">0%</span>
+            </div>
+            <div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+              <div class="h-full bg-tertiary-fixed-dim rounded-full" id="authFill" style="width: 0%;"></div>
+            </div>
           </div>
         </div>
-        
-        <div class="skill-row">
-          <div class="skill-header">
-            <span>API INTEGRATION</span>
-            <span class="skill-pct" id="apiPct">0%</span>
-          </div>
-          <div class="skill-track">
-            <div class="skill-fill" id="apiFill"></div>
-          </div>
-        </div>
-        
-        <div class="skill-row">
-          <div class="skill-header">
-            <span>AUTHENTICATION</span>
-            <span class="skill-pct" id="authPct">0%</span>
-          </div>
-          <div class="skill-track">
-            <div class="skill-fill" id="authFill"></div>
-          </div>
+      </div>
+      
+      <!-- Recent Builds -->
+      <div>
+        <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase mb-4 ml-1">Recent Builds</h3>
+        <div class="flex flex-col gap-4" id="buildsList">
+          <!-- Recent builds are injected dynamically -->
         </div>
       </div>
-    </div>
+    </main>
     
-    <!-- Recent Builds -->
-    <div class="card-title" style="margin: 10px 20px 10px 20px;">Recent Builds</div>
-    <div style="padding: 0 20px;">
-      <div class="builds-list" id="buildsList">
-        <!-- Injected dynamically -->
-      </div>
-    </div>
-    
-    <!-- Navigation Bar -->
-    <div class="bottom-nav">
-      <div class="nav-item" onclick="window.location.href='../dashboard/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-        <span>Home</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../day/12/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-        <span>Challenge</span>
-      </div>
-      <div class="nav-item active" onclick="window.location.href='../progress/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="20" x2="18" y2="10"></line>
-          <line x1="12" y1="20" x2="12" y2="4"></line>
-          <line x1="6" y1="20" x2="6" y2="14"></line>
-        </svg>
-        <span>Progress</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../profile/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Profile</span>
-      </div>
-    </div>
-    
+    <!-- BottomNavBar -->
+    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../dashboard/">
+        <span class="material-symbols-outlined">home</span>
+        <span class="font-label-sm text-xs mt-1">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../day/12/">
+        <span class="material-symbols-outlined">fitness_center</span>
+        <span class="font-label-sm text-xs mt-1">Challenge</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-primary-fixed drop-shadow-[0_0_8px_rgba(150,218,35,0.5)] p-2 active:scale-95 transition-all duration-200" href="../progress/">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+        <span class="font-label-sm text-xs mt-1">Progress</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../profile/">
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-sm text-xs mt-1">Profile</span>
+      </a>
+    </nav>
   </div>
-  
+
   <script type="module">
     import { getState } from '../shared/state.js';
     
     const state = getState();
-    
-    // Total Builds value
     const compCount = state.completedCount;
     document.getElementById("completedVal").innerText = compCount;
     
-    // Set conic-gradient value for circular Ring progress
-    const degrees = (compCount / 60) * 360;
+    // Circular Ring dynamic degrees
+    const pct = compCount / 60;
     const ring = document.getElementById("circRing");
-    ring.style.background = `radial-gradient(closest-side, var(--bg-card) 79%, transparent 80% 100%), conic-gradient(var(--accent-green) ${degrees}deg, var(--bg-input) ${degrees}deg)`;
+    const degrees = pct * 360;
+    
+    ring.style.background = `radial-gradient(closest-side, var(--bg-card) 79%, transparent 80% 100%), conic-gradient(var(--accent-green) ${degrees}deg, var(--bg-surface-container) ${degrees}deg)`;
     
     // Compute progress slider percentage
     let fillPct = 0;
@@ -382,24 +229,24 @@
     else if (compCount >= 45) fillPct = 75 + ((compCount-45)/15)*25;
     else if (compCount >= 30) fillPct = 50 + ((compCount-30)/15)*25;
     else if (compCount >= 12) fillPct = 20 + ((compCount-12)/18)*30;
-    else if (compCount > 0) fillPct = 0 + (compCount/12)*20;
+    else if (compCount > 0) fillPct = (compCount/12)*20;
     
     document.getElementById("miniFill").style.width = `${fillPct}%`;
     
-    // Set mini nodes
+    // mini nodes
     const n1 = document.getElementById("n1");
     const n12 = document.getElementById("n12");
     const n30 = document.getElementById("n30");
     const n45 = document.getElementById("n45");
     const n60 = document.getElementById("n60");
     
-    if (compCount >= 1) n1.className = "mini-node active";
-    if (compCount >= 12) n12.className = "mini-node active";
-    if (compCount >= 30) n30.className = "mini-node active";
-    if (compCount >= 45) n45.className = "mini-node active";
-    if (compCount >= 60) n60.className = "mini-node active";
+    if (compCount >= 1) n1.style.backgroundColor = "var(--accent-green)";
+    if (compCount >= 12) n12.style.backgroundColor = "var(--accent-green)";
+    if (compCount >= 30) n30.style.backgroundColor = "var(--accent-green)";
+    if (compCount >= 45) n45.style.backgroundColor = "var(--accent-green)";
+    if (compCount >= 60) n60.style.backgroundColor = "var(--accent-green)";
     
-    // Skills bars animation values
+    // Skills indicators
     document.getElementById("layoutPct").innerText = `${state.skills.layout}%`;
     document.getElementById("layoutFill").style.width = `${state.skills.layout}%`;
     
@@ -412,7 +259,7 @@
     document.getElementById("authPct").innerText = `${state.skills.auth}%`;
     document.getElementById("authFill").style.width = `${state.skills.auth}%`;
     
-    // Recent builds logs feed rendering
+    // Recent logs list
     const list = document.getElementById("buildsList");
     list.innerHTML = "";
     
@@ -423,38 +270,41 @@
       { day: 9, name: "API Rate Limiter Service", type: "none" }
     ];
     
-    // Filter builds according to completedDays array
     const completedBuilds = allBuilds.filter(b => state.completedDays.includes(b.day));
     
     if (completedBuilds.length === 0) {
-      list.innerHTML = `<div class="empty-state">No builds submitted yet. Complete a challenge to start building your streak!</div>`;
+      list.innerHTML = `
+        <div class="text-center p-8 bg-surface rounded-xl card-border text-on-surface-variant text-sm">
+          No builds submitted yet. Complete a challenge to start building your streak!
+        </div>
+      `;
     } else {
       completedBuilds.forEach(b => {
         const item = document.createElement("div");
-        item.className = "build-item";
+        item.className = "bg-surface rounded-xl p-card-padding card-border relative overflow-hidden flex flex-col gap-3";
         
         let badgesHtml = "";
         if (b.type === "both") {
           badgesHtml = `
-            <div class="build-badges">
-              <span class="badge badge-code">✓ Code Verified</span>
-              <span class="badge badge-social">✓ Social Shared</span>
+            <div class="flex gap-2 text-3xs font-bold">
+              <span class="px-2 py-1 bg-[#a3c9ff]/10 text-secondary border border-[#a3c9ff]/20 rounded-md">✓ CODE VERIFIED</span>
+              <span class="px-2 py-1 bg-[#ff69b4]/10 text-accent-pink border border-[#ff69b4]/20 rounded-md">✓ SOCIAL SHARED</span>
             </div>
           `;
         } else if (b.type === "code") {
           badgesHtml = `
-            <div class="build-badges">
-              <span class="badge badge-code">✓ Code Verified</span>
+            <div class="flex gap-2 text-3xs font-bold">
+              <span class="px-2 py-1 bg-[#a3c9ff]/10 text-secondary border border-[#a3c9ff]/20 rounded-md">✓ CODE VERIFIED</span>
             </div>
           `;
         }
         
         item.innerHTML = `
-          <div class="build-day">DAY ${b.day < 10 ? '0'+b.day : b.day}</div>
-          <div class="build-name">${b.name}</div>
+          <div class="absolute left-0 top-3 bottom-3 w-1 bg-primary-fixed rounded-r"></div>
+          <div class="text-3xs font-label-sm text-primary-fixed font-bold">DAY ${b.day < 10 ? '0'+b.day : b.day}</div>
+          <div class="font-headline-md text-sm font-bold text-primary">${b.name}</div>
           ${badgesHtml}
         `;
-        
         list.appendChild(item);
       });
     }

@@ -1,454 +1,243 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - ABTalks</title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ABTalks Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400&family=Hanken+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../shared/global.css">
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "var(--bg-main)",
+            "surface": "var(--bg-card)",
+            "surface-dim": "var(--bg-surface-dim)",
+            "surface-container": "var(--bg-surface-container)",
+            "surface-container-highest": "var(--bg-surface-container-highest)",
+            "on-surface": "var(--text-primary)",
+            "on-surface-variant": "var(--text-secondary)",
+            "primary-fixed": "var(--accent-green)",
+            "primary-fixed-dim": "var(--accent-green-dim)",
+            "secondary": "var(--accent-blue)",
+            "tertiary-fixed-dim": "var(--accent-purple)",
+            "outline-variant": "var(--border-color)",
+            "primary": "var(--text-primary)",
+            "on-primary-fixed": "#111f00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "base": "8px",
+            "gutter": "16px",
+            "section-gap": "40px",
+            "container-margin": "24px",
+            "card-padding": "20px"
+          },
+          "fontFamily": {
+            "body-md": ["Geist"],
+            "headline-lg": ["Hanken Grotesk"],
+            "display-xl": ["Hanken Grotesk"],
+            "headline-md": ["Hanken Grotesk"],
+            "label-sm": ["JetBrains Mono"],
+            "headline-lg-mobile": ["Hanken Grotesk"]
+          },
+          "fontSize": {
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "display-xl": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.04em", "fontWeight": "800" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <script>
+    if (localStorage.getItem("abt_theme") === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light-theme");
+    }
+  </script>
+  
   <style>
-    .streak-container {
-      position: relative;
-    }
+    body { background-color: var(--bg-main); color: var(--text-primary); }
+    .card-border { border: 1px solid var(--border-color); }
+    .glow-lime { box-shadow: 0 0 12px var(--border-glow); }
+    .glow-orange { box-shadow: 0 0 12px rgba(255, 138, 0, 0.15); }
+    .bg-lime-tint { background-color: rgba(184, 255, 74, 0.02); }
+    .bg-orange-tint { background-color: rgba(255, 138, 0, 0.02); }
     
-    .streak-display {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-    
-    .streak-number-lbl {
-      font-size: 52px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 800;
-      color: var(--accent-orange);
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-    }
-    
-    .streak-number-lbl span {
-      font-size: 20px;
-      color: var(--text-primary);
-      font-weight: 700;
-    }
-    
-    .streak-flame-svg {
-      width: 60px;
-      height: 60px;
-    }
-    
-    .streak-blocks {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 15px;
-    }
-    
-    .streak-block {
-      flex: 1;
-      height: 18px;
-      border-radius: 4px;
-      background-color: #222530;
-      transition: all var(--transition-normal);
-    }
-    
-    .streak-block.active {
-      background: linear-gradient(to bottom, #ff9e43, var(--accent-orange));
-      box-shadow: 0 0 10px rgba(255, 122, 0, 0.4);
-    }
-    
-    .streak-quote {
-      font-size: 13px;
-      font-style: italic;
-      color: var(--text-secondary);
-    }
-    
-    /* Challenge Card */
-    .challenge-tag {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 20px;
-      background-color: rgba(163, 255, 51, 0.1);
-      border: 1px solid rgba(163, 255, 51, 0.2);
-      color: var(--accent-green);
-      font-family: 'Fira Code', monospace;
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-    
-    .challenge-title {
-      font-size: 20px;
-      line-height: 1.4;
-      margin-bottom: 15px;
-      color: var(--text-primary);
-    }
-    
-    .challenge-meta {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
-    }
-    
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .meta-item svg {
-      width: 16px;
-      height: 16px;
-      stroke: var(--text-secondary);
-      stroke-width: 2;
-      fill: none;
-    }
-    
-    /* Momentum Chart */
-    .momentum-bars {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      height: 60px;
-      margin-top: 15px;
-      gap: 8px;
-    }
-    
-    .momentum-col {
-      flex: 1;
-      border-radius: 4px;
-      background-color: #1e2230;
-      transition: all var(--transition-normal);
-    }
-    
-    /* Dynamic heights and colors for momentum columns */
-    .momentum-col.filled-green {
-      background: linear-gradient(to top, #7eff33, #a3ff33);
-      box-shadow: 0 0 10px rgba(163, 255, 51, 0.3);
-    }
-    
-    .momentum-col.filled-blue {
-      background: linear-gradient(to top, #33abff, var(--accent-blue));
-      box-shadow: 0 0 10px rgba(140, 182, 255, 0.3);
-    }
-    
-    .momentum-col.filled-purple {
-      background: linear-gradient(to top, #9e8eff, var(--accent-purple));
-      box-shadow: 0 0 10px rgba(184, 158, 255, 0.3);
-    }
-    
-    /* Journey Progress Slider */
-    .journey-slider-wrapper {
-      position: relative;
-      padding: 15px 5px;
-    }
-    
-    .journey-line-bg {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background-color: #222530;
-      transform: translateY(-50%);
-      border-radius: 2px;
-      z-index: 1;
-    }
-    
-    .journey-line-fill {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      height: 4px;
-      background-color: var(--accent-green);
-      transform: translateY(-50%);
-      border-radius: 2px;
-      z-index: 2;
-      transition: width var(--transition-normal);
-    }
-    
-    .journey-nodes {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      z-index: 3;
-    }
-    
-    .journey-node {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background-color: #222530;
-      border: 2px solid #33384c;
-      cursor: pointer;
-      position: relative;
-      transition: all var(--transition-normal);
-    }
-    
-    .journey-node.active {
-      background-color: var(--accent-green);
-      border-color: #000000;
-      box-shadow: 0 0 10px var(--accent-green);
-      width: 16px;
-      height: 16px;
-      transform: translateY(-1px);
-    }
-    
-    .journey-node.passed {
-      background-color: var(--accent-green);
-      border-color: var(--accent-green);
-    }
-    
-    .journey-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 12px;
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-    
-    .journey-labels span.active {
-      color: var(--accent-green);
-    }
-    
-    /* Achievement badges list */
-    .achievements-list {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 5px 20px 20px 20px;
-      margin: 0 -20px;
-      scrollbar-width: none;
-    }
-    
-    .achievements-list::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .achievement-item {
-      flex: 0 0 130px;
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 15px;
-      text-align: center;
-      transition: all var(--transition-normal);
-      opacity: 0.5;
-      filter: grayscale(1);
-    }
-    
-    .achievement-item.unlocked {
-      opacity: 1;
-      filter: none;
-      border-color: rgba(184, 158, 255, 0.2);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    
-    .achievement-icon {
-      font-size: 24px;
-      margin-bottom: 8px;
-      display: block;
-    }
-    
-    .achievement-name {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-    
-    .achievement-desc {
-      font-size: 9px;
-      color: var(--text-secondary);
-    }
-    
-    .achievement-section-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 10px 20px 10px 20px;
-      font-size: 15px;
-      color: var(--text-primary);
-    }
-    
-    .achievement-section-title svg {
-      width: 18px;
-      height: 18px;
-      stroke: var(--text-secondary);
-      stroke-width: 2;
-      fill: none;
-    }
+    .pb-nav { padding-bottom: 80px; }
   </style>
 </head>
-<body>
-  <div class="app-container">
-    
-    <div class="header">
-      <div class="user-profile-header">
-        <div class="avatar-wrapper">
-          <img class="avatar-img" id="headerAvatar" src="" alt="Avatar">
-        </div>
-        <div>
-          <div class="greeting-text" id="greetingTime">Good evening,</div>
-          <div class="greeting-name" id="headerName">Aarav</div>
-        </div>
-      </div>
-      <button class="notification-btn">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-      </button>
-    </div>
-    
-    <!-- Streak Card -->
-    <div class="card streak-container">
-      <div class="card-title">Current Streak</div>
-      <div class="streak-display">
-        <div class="streak-number-lbl" id="streakVal">
-          0 <span>DAY</span>
-        </div>
-        <div class="streak-flame" id="flameContainer">
-          <!-- SVG Flame injected dynamically based on streak state -->
-        </div>
-      </div>
-      <div class="streak-blocks" id="streakBlocks">
-        <!-- Render blocks dynamically -->
-      </div>
-      <div class="streak-quote" id="streakQuote">
-        "One more build. Keep it alive."
-      </div>
-    </div>
-    
-    <!-- Challenge Card -->
-    <div class="card">
-      <span class="challenge-tag" id="taskDayTag">DAY 12</span>
-      <h2 class="challenge-title" id="taskTitle">Build a responsive developer profile card</h2>
-      <div class="challenge-meta">
-        <div class="meta-item">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-          <span id="taskDuration">45 min</span>
-        </div>
-        <div class="meta-item">
-          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="20" x2="18" y2="10"></line>
-            <line x1="12" y1="20" x2="12" y2="4"></line>
-            <line x1="6" y1="20" x2="6" y2="14"></line>
-          </svg>
-          <span id="taskDifficulty">Intermediate</span>
-        </div>
-      </div>
-      <button class="btn btn-primary" id="challengeBtn" onclick="window.location.href='../day/12/'">
-        Continue Day 12
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </button>
-    </div>
-    
-    <!-- Momentum Card -->
-    <div class="card">
-      <div class="card-title" id="momentumTitle">Momentum - 0 of Last 8 Days</div>
-      <div class="momentum-bars" id="momentumBars">
-        <!-- Rendered dynamically -->
-      </div>
-    </div>
-    
-    <!-- Journey Progress Card -->
-    <div class="card">
-      <div class="card-title">Journey Progress</div>
-      <div class="journey-slider-wrapper">
-        <div class="journey-line-bg"></div>
-        <div class="journey-line-fill" id="journeyFill" style="width: 0%;"></div>
-        <div class="journey-nodes">
-          <div class="journey-node" id="node1" data-day="1"></div>
-          <div class="journey-node" id="node12" data-day="12"></div>
-          <div class="journey-node" id="node30" data-day="30"></div>
-          <div class="journey-node" id="node45" data-day="45"></div>
-          <div class="journey-node" id="node60" data-day="60"></div>
-        </div>
-      </div>
-      <div class="journey-labels">
-        <span id="lbl1">Day 1</span>
-        <span id="lbl12">Day 12</span>
-        <span id="lbl30">Day 30</span>
-        <span id="lbl45">Day 45</span>
-        <span id="lbl60">Day 60</span>
-      </div>
-    </div>
-    
-    <!-- Unlocked Achievements -->
-    <div class="achievement-section-title">
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="8" r="7"></circle>
-        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-      </svg>
-      <span>Unlocked Achievements</span>
-    </div>
-    <div class="achievements-list" id="achievementsList">
-      <!-- Rendered dynamically -->
-    </div>
-    
-    <!-- Navigation Bar -->
-    <div class="bottom-nav">
-      <div class="nav-item active" onclick="window.location.href='../dashboard/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-        <span>Home</span>
-      </div>
-      <div class="nav-item" id="navChallengeBtn" onclick="window.location.href='../day/12/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-        </svg>
-        <span>Challenge</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../progress/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="20" x2="18" y2="10"></line>
-          <line x1="12" y1="20" x2="12" y2="4"></line>
-          <line x1="6" y1="20" x2="6" y2="14"></line>
-        </svg>
-        <span>Progress</span>
-      </div>
-      <div class="nav-item" onclick="window.location.href='../profile/'">
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Profile</span>
-      </div>
-    </div>
-    
-  </div>
+<body class="font-body-md text-body-md min-h-screen flex flex-col pb-nav">
   
+  <div class="max-w-[412px] mx-auto w-full min-h-screen bg-background border-l border-r border-outline-variant/30 relative flex flex-col pb-24">
+    
+    <!-- TopAppBar -->
+    <header class="w-full bg-surface text-primary font-headline-md text-headline-md-mobile flex items-center justify-between px-gutter py-base border-b border-outline-variant/10 z-40">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+          <img id="headerAvatar" alt="User profile avatar" class="object-cover w-full h-full" src=""/>
+        </div>
+        <h1 class="font-bold tracking-tight"><span id="greetingTime">Good evening</span>, <span id="headerName">Aarav</span> 👋</h1>
+      </div>
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-highest transition-colors">
+        <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+      </button>
+    </header>
+    
+    <main class="flex-grow w-full px-4 py-6 flex flex-col gap-6">
+      
+      <!-- Bento Grid Layout -->
+      <div class="grid grid-cols-1 gap-6">
+        
+        <!-- Streak Widget -->
+        <div class="bg-surface rounded-xl p-card-padding card-border bg-orange-tint glow-orange relative overflow-hidden group">
+          <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(255,138,0,0.8)]" id="streakDot"></div>
+          <div class="flex flex-col h-full justify-between gap-4">
+            <div>
+              <h2 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase mb-1">Current Streak</h2>
+              <div class="font-display-xl text-3xl font-extrabold tracking-tighter text-orange-400">
+                <span id="streakVal">0</span> <span class="text-lg text-orange-400/80">DAY</span> 🔥
+              </div>
+            </div>
+            <div class="flex justify-between items-end">
+              <div class="flex gap-1.5" id="streakBlocks">
+                <!-- Staggered blocks render dynamically -->
+              </div>
+            </div>
+            <p class="text-xs text-on-surface-variant italic" id="streakQuote">"One more build. Keep it alive."</p>
+          </div>
+        </div>
+        
+        <!-- Today's Task (Hero Card) -->
+        <div class="bg-surface rounded-xl p-card-padding card-border bg-lime-tint glow-lime flex flex-col justify-between">
+          <div class="flex justify-between items-start mb-6">
+            <div>
+              <span class="inline-block px-3 py-1 rounded-full bg-primary-container/20 text-primary-fixed font-label-sm text-xs font-bold mb-3 border border-primary-container/30" id="taskDayTag">DAY 12</span>
+              <h2 class="font-headline-lg-mobile text-lg font-bold text-primary" id="taskTitle">Build a responsive developer profile card</h2>
+            </div>
+            <div class="p-3 bg-surface-variant rounded-lg border border-outline-variant">
+              <span class="material-symbols-outlined text-primary-fixed text-3xl" style="font-variation-settings: 'FILL' 1;">code_blocks</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 mb-6 text-on-surface-variant text-xs">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">schedule</span> <span id="taskDuration">45 min</span>
+            </div>
+            <div class="w-1 h-1 rounded-full bg-outline-variant"></div>
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">signal_cellular_alt</span> <span id="taskDifficulty">Intermediate</span>
+            </div>
+          </div>
+          <button class="w-full bg-primary-fixed text-on-primary-fixed font-bold py-3 px-6 rounded-lg hover:shadow-[0_0_15px_rgba(184,255,74,0.4)] transition-all flex items-center justify-center gap-2 active:scale-95" id="challengeBtn" onclick="window.location.href='../day/12/'">
+            Continue Day 12 <span class="material-symbols-outlined">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Momentum Widget -->
+      <div class="bg-surface rounded-xl p-card-padding card-border flex flex-col justify-center">
+        <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase mb-4" id="momentumTitle">Momentum - 7 of last 8 days</h3>
+        <div class="flex gap-2 h-12 items-end" id="momentumBars">
+          <!-- activity graph bars render dynamically -->
+        </div>
+      </div>
+      
+      <!-- Progress Journey Bar -->
+      <div class="bg-surface rounded-xl p-card-padding card-border flex flex-col justify-center">
+        <h3 class="font-label-sm text-xs font-bold text-on-surface-variant uppercase mb-6">Journey Progress</h3>
+        <div class="relative w-full h-2 bg-surface-container rounded-full mb-6">
+          <!-- Progress Fill -->
+          <div class="absolute top-0 left-0 h-full bg-primary-fixed rounded-full shadow-[0_0_10px_rgba(184,255,74,0.5)]" id="journeyFill" style="width: 20%;"></div>
+          <!-- Nodes -->
+          <div class="absolute top-1/2 -translate-y-1/2 left-[0%] w-4 h-4 rounded-full bg-surface-container border-2 border-outline-variant" id="n1"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[20%] w-4 h-4 rounded-full bg-surface-container border-2 border-outline-variant" id="n12"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[50%] w-4 h-4 rounded-full bg-surface-container border-2 border-outline-variant" id="n30"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[75%] w-4 h-4 rounded-full bg-surface-container border-2 border-outline-variant" id="n45"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 left-[100%] -translate-x-full w-4 h-4 rounded-full bg-surface-container border-2 border-outline-variant" id="n60"></div>
+        </div>
+        <div class="flex justify-between text-2xs font-bold text-on-surface-variant font-label-sm">
+          <span id="lbl1">Day 1</span>
+          <span id="lbl12">Day 12</span>
+          <span id="lbl30">Day 30</span>
+          <span id="lbl45">Day 45</span>
+          <span id="lbl60">Day 60</span>
+        </div>
+      </div>
+      
+      <!-- Achievements -->
+      <div>
+        <h3 class="font-headline-md text-sm font-bold text-primary mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary">workspace_premium</span> Unlocked Achievements
+        </h3>
+        <div class="flex gap-4 overflow-x-auto pb-4 snap-x hide-scrollbar" id="achievementsList">
+          <!-- Unlocked Achievements rendered dynamically -->
+        </div>
+      </div>
+    </main>
+    
+    <!-- BottomNavBar (Mobile Only) -->
+    <nav class="absolute bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container/90 backdrop-blur-md rounded-t-xl border-t border-outline-variant/10">
+      <a class="flex flex-col items-center justify-center text-primary-fixed drop-shadow-[0_0_8px_rgba(150,218,35,0.5)] active:scale-95 transition-all duration-200" href="../dashboard/">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+        <span class="font-label-sm text-xs mt-1">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../day/12/">
+        <span class="material-symbols-outlined">fitness_center</span>
+        <span class="font-label-sm text-xs mt-1">Challenge</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../progress/">
+        <span class="material-symbols-outlined">leaderboard</span>
+        <span class="font-label-sm text-xs mt-1">Progress</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-lg active:scale-95" href="../profile/">
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-label-sm text-xs mt-1">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <style>
+    /* Utility to hide scrollbar for the horizontal scrolling achievements area */
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+  </style>
+
   <script type="module">
     import { getState } from '../shared/state.js';
     
-    // Greeting time based on hours
+    // Time-based greetings
     const hour = new Date().getHours();
     const greet = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-    document.getElementById("greetingTime").innerText = `${greet},`;
+    document.getElementById("greetingTime").innerText = greet;
     
     const state = getState();
     
-    // User header info
+    // User header credentials
     document.getElementById("headerName").innerText = state.profileName.split(" ")[0];
     const avatarImg = document.getElementById("headerAvatar");
     if (state.profileAvatar) {
       avatarImg.src = state.profileAvatar;
     } else {
-      // Fallback letter avatar
       avatarImg.style.display = "none";
       const wrapper = avatarImg.parentElement;
       wrapper.style.display = "flex";
@@ -456,66 +245,49 @@
       wrapper.style.justifyContent = "center";
       wrapper.style.color = "var(--accent-green)";
       wrapper.style.fontWeight = "bold";
-      wrapper.style.fontSize = "16px";
       wrapper.innerText = state.profileName.charAt(0);
     }
     
-    // Streak info
-    document.getElementById("streakVal").innerHTML = `${state.streak} <span>DAY</span>`;
+    // Streak indicators
+    document.getElementById("streakVal").innerText = state.streak;
     
-    // Streak Flame Icon
-    const flameContainer = document.getElementById("flameContainer");
-    const isStreakActive = state.streak > 0;
-    flameContainer.innerHTML = `
-      <svg class="streak-flame-svg ${isStreakActive ? 'flame-active' : ''}" viewBox="0 0 24 24" fill="${isStreakActive ? 'url(#flameGrad)' : '#222530'}">
-        <defs>
-          <linearGradient id="flameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#ffb233" />
-            <stop offset="50%" stop-color="#ff7a00" />
-            <stop offset="100%" stop-color="#ff3b00" />
-          </linearGradient>
-        </defs>
-        <path d="M12 2c0 0-4 4.5-4 8.5C8 13.5 10 15 12 15s4-1.5 4-4.5C16 6.5 12 2 12 2z"></path>
-        <path d="M12 14c0 0-2 2-2 3.5 0 1 .8 1.5 2 1.5s2-.5 2-1.5c0-1.5-2-3.5-2-3.5z" opacity="0.8"></path>
-      </svg>
-    `;
-    
-    // Streak Quote & blocks
-    const streakQuote = document.getElementById("streakQuote");
     const streakBlocks = document.getElementById("streakBlocks");
-    
-    if (state.streak === 0) {
-      if (state.completedCount === 0) {
-        streakQuote.innerText = "\"The secret of getting ahead is getting started. Begin Day 1!\"";
-      } else {
-        streakQuote.innerText = "\"Streak broken! Missed day. Rebuild your momentum today!\"";
-      }
-    } else {
-      streakQuote.innerText = "\"One more build. Keep it alive.\"";
-    }
-    
-    // Render 7 streak blocks
     streakBlocks.innerHTML = "";
     for(let i = 0; i < 7; i++) {
       const block = document.createElement("div");
-      block.className = "streak-block";
-      // Let's activate blocks matching the active streak length, capped at 7
+      block.style.width = "24px";
+      block.style.height = "32px";
+      block.style.borderRadius = "4px";
+      block.style.backgroundColor = "var(--bg-surface-container)";
+      
       if (state.streak > 0 && i < Math.min(state.streak, 7)) {
-        block.classList.add("active");
-        // Add subtle animation delay for stagger
-        block.style.animationDelay = `${i * 0.1}s`;
+        block.style.backgroundColor = "var(--accent-orange)";
+        block.style.boxShadow = "0 0 10px rgba(255, 122, 0, 0.4)";
       }
       streakBlocks.appendChild(block);
     }
     
-    // Challenge Info
+    const streakQuote = document.getElementById("streakQuote");
+    const streakDot = document.getElementById("streakDot");
+    if (state.streak === 0) {
+      streakDot.style.display = "none";
+      if (state.completedCount === 0) {
+        streakQuote.innerText = "\"The secret of getting ahead is getting started. Begin Day 1!\"";
+      } else {
+        streakQuote.innerText = "\"Streak broken! Rebuild your momentum today!\"";
+      }
+    } else {
+      streakDot.style.display = "block";
+      streakQuote.innerText = "\"One more build. Keep it alive.\"";
+    }
+    
+    // Challenge info
     const isNew = state.completedCount === 0;
     const activeDay = isNew ? 1 : (state.day12CodeVerified && state.day12SocialVerified ? 13 : 12);
     
     const taskDayTag = document.getElementById("taskDayTag");
     const taskTitle = document.getElementById("taskTitle");
     const challengeBtn = document.getElementById("challengeBtn");
-    const navChallengeBtn = document.getElementById("navChallengeBtn");
     
     taskDayTag.innerText = `DAY ${activeDay}`;
     
@@ -523,121 +295,133 @@
       taskTitle.innerText = "Setup Development Tools and Git Repository";
       document.getElementById("taskDuration").innerText = "30 min";
       document.getElementById("taskDifficulty").innerText = "Beginner";
-      challengeBtn.innerHTML = `Start Day 1 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+      challengeBtn.innerHTML = `Start Day 1 <span class="material-symbols-outlined">arrow_forward</span>`;
       challengeBtn.onclick = () => window.location.href = '../day/12/';
-      navChallengeBtn.onclick = () => window.location.href = '../day/12/';
     } else if (activeDay === 13) {
       taskTitle.innerText = "Create dynamic states and interactive charts";
       document.getElementById("taskDuration").innerText = "60 min";
       document.getElementById("taskDifficulty").innerText = "Advanced";
-      challengeBtn.innerHTML = `Continue Day 13 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+      challengeBtn.innerHTML = `Continue Day 13 <span class="material-symbols-outlined">arrow_forward</span>`;
       challengeBtn.onclick = () => alert("Congrats! Day 12 is completed. Day 13 launches tomorrow!");
-      challengeBtn.classList.add("btn-disabled");
+      challengeBtn.style.opacity = "0.5";
+      challengeBtn.style.cursor = "not-allowed";
     } else {
       taskTitle.innerText = "Build a responsive developer profile card";
       document.getElementById("taskDuration").innerText = "45 min";
       document.getElementById("taskDifficulty").innerText = "Intermediate";
-      challengeBtn.innerHTML = `Continue Day 12 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+      challengeBtn.innerHTML = `Continue Day 12 <span class="material-symbols-outlined">arrow_forward</span>`;
       challengeBtn.onclick = () => window.location.href = '../day/12/';
     }
     
-    // Momentum Chart
+    // Momentum graph rendering
     const completedLast8 = state.momentum.reduce((a,b) => a+b, 0);
-    document.getElementById("momentumTitle").innerText = `Momentum - ${completedLast8} of Last 8 Days`;
+    document.getElementById("momentumTitle").innerText = `Momentum - ${completedLast8} of last 8 days`;
     
     const momentumBars = document.getElementById("momentumBars");
     momentumBars.innerHTML = "";
     
-    // Colors of columns (matching mockup colors)
-    const colColors = ["", "", "filled-green", "filled-green", "filled-blue", "", "filled-purple", "filled-purple", "filled-green"];
-    const colHeights = [15, 45, 52, 60, 15, 38, 48, 55];
+    const colHeights = [40, 60, 80, 100, 200, 50, 70, 90];
     
     for (let i = 0; i < 8; i++) {
       const col = document.createElement("div");
-      col.className = "momentum-col";
-      col.style.height = `${colHeights[i]}px`;
+      col.style.width = "100%";
+      col.style.borderRadius = "2px 2px 0 0";
+      col.style.height = `${colHeights[i]/2}%`;
+      col.style.backgroundColor = "var(--bg-surface-container)";
       
-      // If student has done the build that day
       if (state.momentum[i] === 1) {
-        // Assign colors mimicking the mockup
-        if (i === 1 || i === 2) col.classList.add("filled-green");
-        else if (i === 3) col.classList.add("filled-blue");
-        else if (i === 5 || i === 6) col.classList.add("filled-purple");
-        else if (i === 7) col.classList.add("filled-green");
+        if (i === 1 || i === 2 || i === 7) {
+          col.style.backgroundColor = "var(--accent-green)";
+          col.style.boxShadow = "0 0 8px rgba(177, 247, 67, 0.3)";
+        } else if (i === 3) {
+          col.style.backgroundColor = "#4DE3D2";
+          col.style.boxShadow = "0 0 12px rgba(77, 227, 210, 0.4)";
+        } else if (i === 5 || i === 6) {
+          col.style.backgroundColor = "var(--accent-purple)";
+          col.style.boxShadow = "0 0 8px rgba(206, 189, 255, 0.3)";
+        }
       }
       momentumBars.appendChild(col);
     }
     
-    // Journey Slider Fill & nodes
-    const journeyFill = document.getElementById("journeyFill");
-    const nodes = {
-      1: document.getElementById("node1"),
-      12: document.getElementById("node12"),
-      30: document.getElementById("node30"),
-      45: document.getElementById("node45"),
-      60: document.getElementById("node60")
-    };
+    // Journey progress
+    const n1 = document.getElementById("n1");
+    const n12 = document.getElementById("n12");
+    const n30 = document.getElementById("n30");
+    const n45 = document.getElementById("n45");
+    const n60 = document.getElementById("n60");
+    const lbl1 = document.getElementById("lbl1");
+    const lbl12 = document.getElementById("lbl12");
+    const lbl30 = document.getElementById("lbl30");
+    const lbl45 = document.getElementById("lbl45");
+    const lbl60 = document.getElementById("lbl60");
     
-    const nodeLabels = {
-      1: document.getElementById("lbl1"),
-      12: document.getElementById("lbl12"),
-      30: document.getElementById("lbl30"),
-      45: document.getElementById("lbl45"),
-      60: document.getElementById("lbl60")
-    };
+    const journeyFill = document.getElementById("journeyFill");
     
     let currentTaskDay = isNew ? 1 : 12;
     if (state.day12CodeVerified && state.day12SocialVerified) currentTaskDay = 13;
     
-    // Compute progress percentage
     let percentage = 0;
     if (currentTaskDay === 1) percentage = 0;
-    else if (currentTaskDay <= 12) percentage = 15; // Between Day 1 and 12
-    else if (currentTaskDay > 12) percentage = 23;
+    else if (currentTaskDay <= 12) percentage = 20;
+    else if (currentTaskDay > 12) percentage = 30;
     
     journeyFill.style.width = `${percentage}%`;
     
-    // Set node statuses
-    Object.keys(nodes).forEach(d => {
-      const dayNum = parseInt(d);
-      const node = nodes[dayNum];
-      const lbl = nodeLabels[dayNum];
+    const resetNodeStyle = (node, active, passed) => {
+      node.style.backgroundColor = "var(--bg-surface-container)";
+      node.style.borderColor = "var(--border-color)";
+      node.style.boxShadow = "none";
       
-      if (dayNum < currentTaskDay) {
-        node.className = "journey-node passed";
-        lbl.className = "active";
-      } else if (dayNum === 12 && currentTaskDay === 12) {
-        node.className = "journey-node active";
-        lbl.className = "active";
-      } else if (dayNum === 1 && currentTaskDay === 1) {
-        node.className = "journey-node active";
-        lbl.className = "active";
-      } else {
-        node.className = "journey-node";
+      if (passed) {
+        node.style.backgroundColor = "var(--accent-green)";
+        node.style.borderColor = "var(--accent-green)";
+      } else if (active) {
+        node.style.backgroundColor = "var(--accent-green)";
+        node.style.borderColor = "var(--bg-main)";
+        node.style.boxShadow = "0 0 12px rgba(184, 255, 74, 0.8)";
       }
-    });
+    };
     
-    // Render Achievements Unlocked list
+    resetNodeStyle(n1, currentTaskDay === 1, currentTaskDay > 1);
+    resetNodeStyle(n12, currentTaskDay === 12, currentTaskDay > 12);
+    resetNodeStyle(n30, false, currentTaskDay > 30);
+    resetNodeStyle(n45, false, currentTaskDay > 45);
+    resetNodeStyle(n60, false, currentTaskDay > 60);
+    
+    lbl1.className = currentTaskDay >= 1 ? "text-primary-fixed" : "";
+    lbl12.className = currentTaskDay >= 12 ? "text-primary-fixed" : "";
+    
+    // Achievements List
     const achievementsList = document.getElementById("achievementsList");
     achievementsList.innerHTML = "";
     
-    const achievementEmojis = {
-      "first-build": "🏋️‍♂️",
-      "7-day": "🔥",
-      "10-builds": "🔟",
-      "public-builder": "📢"
+    const iconsMap = {
+      "first-build": "construction",
+      "7-day": "local_fire_department",
+      "10-builds": "view_cozy",
+      "public-builder": "share"
+    };
+    
+    const colorsMap = {
+      "first-build": "text-tertiary-fixed-dim",
+      "7-day": "text-secondary",
+      "10-builds": "text-primary-fixed",
+      "public-builder": "text-accent-pink"
     };
     
     state.achievements.forEach(ach => {
-      const item = document.createElement("div");
-      item.className = `achievement-item ${ach.unlocked ? 'unlocked' : ''}`;
-      
-      item.innerHTML = `
-        <span class="achievement-icon">${achievementEmojis[ach.id] || '🏆'}</span>
-        <div class="achievement-name">${ach.title}</div>
-        <div class="achievement-desc">${ach.desc}</div>
-      `;
-      achievementsList.appendChild(item);
+      if (ach.unlocked) {
+        const item = document.createElement("div");
+        item.className = "min-w-[140px] bg-surface rounded-lg p-4 card-border flex flex-col items-center text-center snap-center hover:bg-surface-variant transition-colors border-t";
+        item.style.borderTopColor = `var(--accent-${ach.id === '7-day' ? 'blue' : ach.id === 'first-build' ? 'purple' : 'green'})`;
+        
+        item.innerHTML = `
+          <span class="material-symbols-outlined text-3xl mb-2 ${colorsMap[ach.id] || 'text-primary'}" style="font-variation-settings: 'FILL' 1;">${iconsMap[ach.id] || 'workspace_premium'}</span>
+          <span class="font-label-sm text-xs font-bold text-primary">${ach.title}</span>
+        `;
+        achievementsList.appendChild(item);
+      }
     });
   </script>
 </body>

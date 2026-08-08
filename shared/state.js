@@ -123,12 +123,68 @@ export function resetAllStates() {
   localStorage.removeItem("abtalks_state_default");
   localStorage.removeItem("abtalks_state_new");
   localStorage.removeItem("abtalks_state_missed");
+  localStorage.removeItem("abtalks_logged_in");
+  localStorage.removeItem("abt_theme");
   window.location.reload();
 }
 
+// Auth / Session Management
+export function isLoggedIn() {
+  return localStorage.getItem("abtalks_logged_in") !== "false";
+}
+
+export function login() {
+  localStorage.setItem("abtalks_logged_in", "true");
+}
+
+export function logout() {
+  localStorage.setItem("abtalks_logged_in", "false");
+  // Redirect to root
+  const root = getRelativeRoot();
+  window.location.href = root;
+}
+
+function getRelativeRoot() {
+  const loc = window.location.pathname;
+  if (loc.includes("/day/12")) return "../../";
+  if (loc.includes("/dashboard") || loc.includes("/progress") || loc.includes("/profile")) return "../";
+  return "./";
+}
+
+// Theme Management
+export function getTheme() {
+  return localStorage.getItem("abt_theme") || "dark";
+}
+
+export function setTheme(theme) {
+  localStorage.setItem("abt_theme", theme);
+  applyTheme();
+}
+
+export function applyTheme() {
+  const theme = getTheme();
+  if (theme === "light") {
+    document.documentElement.classList.add("light-theme");
+    document.body?.classList.add("light-theme");
+  } else {
+    document.documentElement.classList.remove("light-theme");
+    document.body?.classList.remove("light-theme");
+  }
+}
+
+// Route Guard Validation
+const isAuth = isLoggedIn();
+const path = window.location.pathname;
+if (!isAuth && (path.includes("/dashboard") || path.includes("/day/12") || path.includes("/progress") || path.includes("/profile"))) {
+  window.location.href = getRelativeRoot();
+}
+
+// Apply Theme immediately upon script load (prevents styling flash)
+applyTheme();
+
 // Auto Inject Demo Control Panel
 document.addEventListener("DOMContentLoaded", () => {
-  // If on landing page, maybe don't display or do display. Let's display it everywhere for testing ease.
+  applyTheme(); // Re-apply once body is parsed to ensure class binds
   
   const switcher = document.createElement("div");
   switcher.className = "demo-switcher collapsed";
